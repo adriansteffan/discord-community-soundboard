@@ -56,7 +56,7 @@ The backend of the bot is built on Django 3.0, so [Python 3.6+](https://www.pyth
 If you are on Windows, be sure to [add Python to PATH](https://datatofish.com/add-python-to-windows-path/).
 
 To self-host/develop the bot, you will also need to create a bot application [here](https://discordapp.com/developers/applications/) 
-and retreive the token (New Application > Bot > Add Bot > Copy Token).
+and retrieve the token (New Application > Bot > Add Bot > Copy Token).
 
 
 
@@ -69,30 +69,30 @@ cd backend
 pip install -r requirements.txt
 ```
 
-#####Next, you will need to configure two secret keys for the project: 
+#####Next, you will need to configure secret keys for the project:
 
-In `backend/backend/settings.py` replace the placeholder string 
-
-```
-SECRET_KEY = 'YOUR_SECRET_KEY_HERE'
-```
-
-with a secret key created at [djecrety](https://djecrety.ir/).
-
-In `backend/discord_bot/discord_interface/config/config.py` replace
+In the ```backend``` folder, create a ```keys.py``` with the following structure:
 
 ```
-TOKEN: str = "YOUR_TOKEN_HERE"
+bot_token = "YOUR_BOT_TOKEN_HERE"
+
+django_secret_key = "YOUR_SECRET_KEY_HERE"
+
+database_password = "your_password_here"
 ```
 
-with your discord bot token.
+Put in the discord application token.
+
+For the secret key, create one with [djecrety](https://djecrety.ir/).
+
+The database password will be used by the django app to access the database, use a strong password of your own. 
 
 #### Database Setup
 
 Get [PostgreSQL 10.12](https://www.postgresql.org/download/).
 
 
-In psql, setup a database and a user while replacing your_password_here with a strong password of your own:
+In psql, setup a database and a user while replacing your_password_here the password specified in ```keys.py```:
 ```
 CREATE DATABASE discordbotbackend;
 CREATE USER discordbotuser WITH PASSWORD 'your_password_here';
@@ -102,24 +102,7 @@ ALTER ROLE discordbotuser SET timezone TO 'CET';
 GRANT ALL PRIVILEGES ON DATABASE discordbotbackend TO discordbotuser;
 ```
 
-Finally replace the PASSWORD field in the DATABASES entry in ```backend/backend/setting.py```:
-```
-. . .
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'discordbotbackend',
-        'USER': 'discordbotuser',
-        'PASSWORD': 'your_password_here',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
-
-. . .
-
-```
+Finally replace the PASSWORD field in the DATABASES entry in
 
 Afterwards, run
 

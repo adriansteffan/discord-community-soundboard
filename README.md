@@ -22,7 +22,7 @@ cd frontend
 npm install
 ```
 
-###Running
+### Running
 
 Run the app in the development mode with
 
@@ -115,7 +115,8 @@ in the ```backend``` directory to  configure the database.
 
 ### Running the bot
 
-Start the backend with
+Make sure the database service is active.
+Then, start the backend with
 
 ```
 python run.py

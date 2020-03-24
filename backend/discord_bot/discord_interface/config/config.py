@@ -1,4 +1,6 @@
-TOKEN: str = "YOUR_TOKEN_HERE"
+import keys
+
+TOKEN: str = keys.bot_token
 DEFAULT_NICKNAME = "{Discord Soundbot}"
 
 STARTUP_MESSAGE = "Starting Bot..."

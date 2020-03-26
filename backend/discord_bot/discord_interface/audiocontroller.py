@@ -1,13 +1,6 @@
-import urllib
-from string import printable
-
-import discord
-import youtube_dl
-from bs4 import BeautifulSoup
-
 from discord_bot.discord_interface.config import config
 from discord_bot.discord_interface.playlist import Playlist
-from discord_bot.discord_interface.songinfo import Songinfo
+from discord_bot.discord_interface.audioelements.dummy import Dummy
 
 
 class AudioController(object):
@@ -25,7 +18,6 @@ class AudioController(object):
         self.bot = bot
         self._volume = volume
         self.playlist = Playlist()
-        self.current_songinfo = None
         self.guild = guild
         self.voice_client = None
 
@@ -44,102 +36,18 @@ class AudioController(object):
     async def register_voice_channel(self, channel):
         self.voice_client = await channel.connect()
 
-    def track_history(self):
-        history_string = config.INFO_HISTORY_TITLE
-        for trackname in self.playlist.trackname_history:
-            history_string += "\n" + trackname
-        return history_string
-
     def next_song(self, error):
-        """Invoked after a song is finished. Plays the next song if there is one, resets the nickname otherwise"""
+        """Invoked after a song is finished. Plays the next song if there is one"""
 
-        self.current_songinfo = None
-        next_song = self.playlist.next()
+        next_audio = self.playlist.next()
 
-        if next_song is None:
-            coro = self.guild.me.edit(nick=config.DEFAULT_NICKNAME)
-        else:
-            coro = self.play_youtube(next_song)
+        if next_audio is not None:
+            coro = next_audio.play(self.guild, self.voice_client, self.volume, self.next_song)
+            self.bot.loop.create_task(coro)
 
-        self.bot.loop.create_task(coro)
-
-    async def add_youtube(self, link):
-        """Processes a youtube link and passes elements of a playlist to the add_song function one by one"""
-
-        # Pass it on if it is not a playlist
-        if not ("playlist?list=" in link):
-            await self.add_song(link)
-            return
-
-        # Parse the playlist page html and get all the individual video links
-        response = urllib.request.urlopen(link)
-        soup = BeautifulSoup(response.read(), "html.parser")
-        res = soup.find_all('a', {'class': 'pl-video-title-link'})
-        for l in res:
-            await self.add_song('https://www.youtube.com' + l.get("href"))
-
-    async def add_song(self, track):
-        """Adds the track to the playlist instance and plays it, if it is the first song"""
-
-        # If the track is a video title, get the corresponding video link first
-        if not ("watch?v=" in track):
-            link = self.convert_to_youtube_link('"' + track + '"')
-            if link is None:
-                link = self.convert_to_youtube_link(track)
-                if link is None:
-                    return
-        else:
-            link = track
-        self.playlist.add(link)
-        if len(self.playlist.playque) == 1:
-            await self.play_youtube(link)
-
-    def convert_to_youtube_link(self, title):
-        """Searches youtube for the video title and returns the first results video link"""
-
-        filter(lambda x: x in set(printable), title)
-
-        # Parse the search result page for the first results link
-        query = urllib.parse.quote(title)
-        url = "https://www.youtube.com/results?search_query=" + query
-        response = urllib.request.urlopen(url)
-        html = response.read()
-        soup = BeautifulSoup(html, "html.parser")
-        results = soup.findAll(attrs={'class': 'yt-uix-tile-link'})
-        checked_videos = 0;
-        while len(results) > checked_videos:
-            if not "user" in results[checked_videos]['href']:
-                return 'https://www.youtube.com' + results[checked_videos]['href']
-            checked_videos += 1
-        return None
-
-    async def play_youtube(self, youtube_link):
-        """Downloads and plays the audio of the youtube link passed"""
-
-        youtube_link = youtube_link.split("&list=")[0]
-
-        try:
-            downloader = youtube_dl.YoutubeDL({'format': 'bestaudio', 'title': True})
-            extracted_info = downloader.extract_info(youtube_link, download=False)
-        # "format" is not available for livestreams - redownload the page with no options
-        except:
-            try:
-                downloader = youtube_dl.YoutubeDL({})
-                extracted_info = downloader.extract_info(youtube_link, download=False)
-            except:
-                self.next_song(None)
-
-        
-        # Update the songinfo to reflect the current song
-        self.current_songinfo = Songinfo(extracted_info.get('uploader'), extracted_info.get('creator'),
-                                         extracted_info.get('title'), extracted_info.get('duration'),
-                                         extracted_info.get('like_count'), extracted_info.get('dislike_count'),
-                                         extracted_info.get('webpage_url'))
-
-        
-        self.voice_client.play(discord.FFmpegPCMAudio(extracted_info['url']), after=lambda e: self.next_song(e))
-        self.voice_client.source = discord.PCMVolumeTransformer(self.guild.voice_client.source)
-        self.voice_client.source.volume = float(self.volume) / 100.0
+    async def start_playback(self):
+        """Starts the first song in the playlist"""
+        await self.playlist.playque[0].play(self.guild, self.voice_client, self.volume, self.next_song)
 
     async def stop_player(self):
         """Stops the player and removes all songs from the queue"""
@@ -158,11 +66,11 @@ class AudioController(object):
         if self.guild.voice_client is None or (
                 not self.guild.voice_client.is_paused() and not self.guild.voice_client.is_playing()):
             prev_song = self.playlist.prev()
-            # The Dummy is used if there is no song in the history
-            if prev_song == "Dummy":
+            # The Dummy is used if there is no song in the history to replay the current song on prev
+            if isinstance(prev_song, Dummy):
                 self.playlist.next()
                 return None
-            await self.play_youtube(prev_song)
+            await prev_song.play(self.guild, self.voice_client, self.volume, self.next_song)
         else:
             self.playlist.prev()
             self.playlist.prev()

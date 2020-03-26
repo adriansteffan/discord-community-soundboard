@@ -3,7 +3,10 @@ from discord.ext import commands
 
 from discord_bot.discord_interface.config.config import *
 from discord_bot.discord_interface.audiocontroller import AudioController
-from discord_bot.discord_interface.utils import guild_to_audiocontroller
+from discord_bot.discord_interface.utils import guild_to_audiocontroller, get_guild
+from discord_bot.discord_interface.audioelements.localclip import LocalClipHelper
+
+from discord.ext.commands import CommandNotFound
 
 
 initial_extensions = ['discord_bot.discord_interface.commands.music', 'discord_bot.discord_interface.commands.general']
@@ -47,6 +50,22 @@ async def on_guild_join(guild):
         await guild_to_audiocontroller[guild].register_voice_channel(guild.voice_channels[0])
     except:
         print("could not join "+guild.name)
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        if ctx.message.content.startswith('!'):
+
+            guild = get_guild(bot, ctx.message)
+            if guild is not None:
+                await LocalClipHelper.add_soundclip_from_name(
+                    guild_to_audiocontroller[guild],
+                    ctx.message.content[1:]
+                )
+            return
+    raise error
+
 
 
 

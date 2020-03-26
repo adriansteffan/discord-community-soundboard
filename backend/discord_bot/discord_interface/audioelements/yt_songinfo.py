@@ -1,7 +1,7 @@
 from discord_bot.discord_interface.config import config
 
 
-class Songinfo:
+class YtSonginfo:
     """A wrapper for information about the song currently being played."""
 
     def __init__(self, uploader, creator, title, duration, like_count, dislike_count, webpage_url):

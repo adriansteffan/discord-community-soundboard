@@ -1,6 +1,7 @@
 from collections import deque
 
 from discord_bot.discord_interface.config import config
+from discord_bot.discord_interface.audioelements.dummy import Dummy
 
 
 class Playlist:
@@ -11,23 +12,18 @@ class Playlist:
         self.playque = deque()
         self.playhistory = deque()
 
-        # A seperate history that remembers the names of the tracks that were played
-        self.trackname_history = deque()
-
     def __len__(self):
         return len(self.playque)
-
-    def add_name(self, trackname):
-        self.trackname_history.append(trackname)
-        if len(self.trackname_history) > config.MAX_TRACKNAME_HISTORY_LENGTH:
-                self.trackname_history.popleft()
 
     def add(self, track):
         self.playque.append(track)
 
     def next(self):
+        if len(self.playque) == 0:
+            return None
+
         song_played = self.playque.popleft()
-        if song_played != "Dummy":
+        if not isinstance(song_played, Dummy):
             self.playhistory.append(song_played)
             if len(self.playhistory) > config.MAX_HISTORY_LENGTH:
                 self.playhistory.popleft()
@@ -37,7 +33,7 @@ class Playlist:
 
     def prev(self):
         if len(self.playhistory) == 0:
-            dummy = "DummySong"
+            dummy = Dummy()
             self.playque.appendleft(dummy)
             return dummy
         self.playque.appendleft(self.playhistory.pop())

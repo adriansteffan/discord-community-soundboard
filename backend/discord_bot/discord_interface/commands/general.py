@@ -48,10 +48,7 @@ class General(commands.Cog):
 
         await utils.connect_to_channel(current_guild, dest_channel_name, ctx, switch=True, default=False)
 
-    @commands.command(name='addbot', description=config.HELP_ADDBOT_LONG, help=config.HELP_ADDBOT_SHORT)
-    async def _addbot(self, ctx):
-        await ctx.send(config.ADD_MESSAGE_1 + str(self.bot.user.id) + config.ADD_MESSAGE_2)
-
 
 def setup(bot):
     bot.add_cog(General(bot))
+

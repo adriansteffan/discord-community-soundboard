@@ -9,9 +9,19 @@ export function menu(state = initialState.menu, action) {
 	}
 }
 
+export function authInformation(state = initialState.authInformation, action) {
+	switch (action.type) {
+		case "SET_AUTHTOKEN":
+			return {...state, token: action.token};
+		default:
+			return state;
+	}
+}
+
 
 const reducer = combineReducers({
 	menu,
+	authInformation,
 });
 
 export default reducer;

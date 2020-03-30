@@ -2,16 +2,26 @@
 
 A discord bot built for "enriching" your discord experience playing custom soundclips -
 The main feature is a web interface that allows you to control the bot, manage users and upload custom sound clips.
+The web interface is only accessible to members on the same discord server as the bot.
 
 
 # Getting Started
+
+To self-host/develop the bot, you will need to create a bot application [here](https://discordapp.com/developers/applications/) 
+
+Copy the client id, client secret and the token (Add Bot > Copy Token).
+
+Next, head to "OAuth2" and add `YOUR_FRONTEND_URL_HERE/auth` to the redirects (e.g. `http://localhost:3000/auth` for development). Then, check `identify` and `guilds` and copy/save the generated auth link.
+
+You may also want to [add the bot to a server of yours](https://github.com/jagrosh/MusicBot/wiki/Adding-Your-Bot-To-Your-Server).
+
 
 ## Fontend
 
 
 ### Prerequisites
 
-A recent version of [Node](https://nodejs.org/en/download/) is required.
+A recent version of [Node.js](https://nodejs.org/en/download/) is required.
 
 
 ### Installing
@@ -22,6 +32,24 @@ cd frontend
 npm install
 ```
 
+In the ```src``` directory, create a ```config.js``` with the following structure:
+
+```
+var config = {};
+
+
+config.backendUrl = "YOUR_BACKEND_URL_HERE"; // use http://localhost:8080 for development
+config.frontendUrl = "YOUR_FRONTEND_URL_HERE"; // use http://localhost:3000 for development
+
+config.oauthUrl = "YOUR_OAUTH_LINK"
+
+export default configure;
+
+```
+
+Fill in the urls at which frontend and backend can be reached and insert the previously generated auth link.
+
+
 ### Running
 
 Run the app in the development mode with
@@ -31,7 +59,7 @@ npm start
 ```
 in the ```fronted``` directory.
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+By default, open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.
 
@@ -52,13 +80,8 @@ in the ```fronted``` directory.
 
 ### Prerequisites
 
-The backend of the bot is built on Django 3.0, so [Python 3.6+](https://www.python.org/downloads/) is required.
+The backend of the bot is built on Django and various python packages, so [Python 3.7](https://www.python.org/downloads/) is required.
 If you are on Windows, be sure to [add Python to PATH](https://datatofish.com/add-python-to-windows-path/).
-
-To self-host/develop the bot, you will also need to create a bot application [here](https://discordapp.com/developers/applications/) 
-and retrieve the token (New Application > Bot > Add Bot > Copy Token).
-
-You may also want to [add the bot to a server of yours](https://github.com/jagrosh/MusicBot/wiki/Adding-Your-Bot-To-Your-Server).
 
 ### Installing
 
@@ -67,7 +90,9 @@ From the project root, run the following
 ```
 cd backend
 pip install -r requirements.txt
+manage.py collectstatic
 ```
+
 
 #### Next, you will need to configure secret keys for the project:
 
@@ -75,13 +100,15 @@ In the ```backend``` folder, create a ```keys.py``` with the following structure
 
 ```
 bot_token = "YOUR_BOT_TOKEN_HERE"
+client_id = "YOUR_CLIENT_ID_HERE"
+client_secret = "YOUR_CLIENT_SECRET_HERE"
 
 django_secret_key = "YOUR_SECRET_KEY_HERE"
 
 database_password = "your_password_here"
 ```
 
-Put in the discord application token.
+Put in the discord application token, client id and client secret.
 
 For the secret key, create one with [djecrety](https://djecrety.ir/).
 
@@ -112,7 +139,7 @@ python manage.py migrate
 
 in the ```backend``` directory to  configure the database.
 
-
+ 
 ### Running the bot
 
 Make sure the database service is active.
@@ -124,7 +151,7 @@ python run.py
 
 in the ```backend``` directory.
 
-The server will be listening on [http://localhost:8080](http://localhost:8080)
+By default, the server will be listening on [http://localhost:8080](http://localhost:8080)
 
 
 ## Authors

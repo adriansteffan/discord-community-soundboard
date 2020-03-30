@@ -1,4 +1,7 @@
 const initialState = {
+	authInformation: {
+		token : null,
+	},
 	menu: {
 
 	},

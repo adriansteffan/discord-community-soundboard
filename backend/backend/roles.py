@@ -4,7 +4,6 @@ from django.conf import settings
 
 from rolepermissions.checkers import has_role, has_permission
 from rolepermissions.utils import user_is_authenticated
-from rolepermissions.checkers import has_permission
 
 from rolepermissions.roles import AbstractUserRole
 
@@ -58,7 +57,7 @@ def has_permission_decorator(permission_name, redirect_to_login=None):
         def wrapper(request, *args, **kwargs):
             user = request.user
             if user_is_authenticated(user):
-                if has_permission(user, permission_name) and has_role(user, 'owner'):
+                if has_permission(user, permission_name) or has_role(user, 'owner'):
                     return dispatch(request, *args, **kwargs)
 
             redirect = redirect_to_login

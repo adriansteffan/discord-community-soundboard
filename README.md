@@ -106,6 +106,8 @@ client_secret = "YOUR_CLIENT_SECRET_HERE"
 django_secret_key = "YOUR_SECRET_KEY_HERE"
 
 database_password = "your_password_here"
+
+bot_owners = ["your_discord_account_id_here"]
 ```
 
 Put in the discord application token, client id and client secret.
@@ -113,6 +115,8 @@ Put in the discord application token, client id and client secret.
 For the secret key, create one with [djecrety](https://djecrety.ir/).
 
 The database password will be used by the django app to access the database, use a strong password of your own. 
+
+bot_owners is a list of users that have access to all functionality of the bot by default and are able to create moderators. 
 
 #### Database Setup
 

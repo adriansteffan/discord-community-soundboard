@@ -6,7 +6,8 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 
 from backend.roles import has_permission_decorator
-from rolepermissions.roles import assign_role
+from rolepermissions.roles import assign_role, remove_role
+from rolepermissions.checkers import has_role
 
 import keys
 from discord_bot.discord_interface.run_bot import bot
@@ -82,6 +83,14 @@ def create_access(request):
         guild = Guild(id=guild_dict['id'], name=guild_dict['name'])
         guild.save()
         user.profile.guilds.add(guild)
+
+    # Check if the owner role status of the user is up to date and edit it if necessary
+    is_specified_as_owner = user_id in keys.bot_owners
+    is_owner = has_role(user, "owner")
+    if is_owner and not is_specified_as_owner:
+        remove_role(user, 'owner')
+    elif not is_owner and is_specified_as_owner:
+        assign_role(user, 'owner')
 
     user.save()
 

@@ -1,4 +1,15 @@
+from django.contrib.auth.views import redirect_to_login as dj_redirect_to_login
+from django.core.exceptions import PermissionDenied
+from django.conf import settings
+
+from rolepermissions.checkers import has_role, has_permission
+from rolepermissions.utils import user_is_authenticated
+from rolepermissions.checkers import has_permission
+
 from rolepermissions.roles import AbstractUserRole
+
+from functools import wraps
+
 
 
 class Minimal(AbstractUserRole):
@@ -37,3 +48,25 @@ class Owner(AbstractUserRole):
 
 
 default_roles = ["minimal", "basic"]
+
+
+# We redefine the permission decorator to allow "Owner" users to access all functionality
+
+def has_permission_decorator(permission_name, redirect_to_login=None):
+    def request_decorator(dispatch):
+        @wraps(dispatch)
+        def wrapper(request, *args, **kwargs):
+            user = request.user
+            if user_is_authenticated(user):
+                if has_permission(user, permission_name) and has_role(user, 'owner'):
+                    return dispatch(request, *args, **kwargs)
+
+            redirect = redirect_to_login
+            if redirect is None:
+                redirect = getattr(
+                    settings, 'ROLEPERMISSIONS_REDIRECT_TO_LOGIN', False)
+            if redirect:
+                return dj_redirect_to_login(request.get_full_path())
+            raise PermissionDenied
+        return wrapper
+    return request_decorator

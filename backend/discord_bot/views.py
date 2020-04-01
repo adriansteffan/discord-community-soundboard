@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
-from rolepermissions.decorators import has_permission_decorator
+from backend.roles import has_permission_decorator
 
 import asyncio
 

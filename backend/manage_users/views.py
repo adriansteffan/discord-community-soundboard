@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
 
-from rolepermissions.decorators import has_permission_decorator
+from backend.roles import has_permission_decorator
 from rolepermissions.roles import assign_role
 
 import keys

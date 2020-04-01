@@ -15,9 +15,9 @@ class Tag(models.Model):
 class SoundClip(models.Model):
     name = models.TextField(unique=True)
     path = models.TextField(unique=True)
-    duration = models.BigIntegerField()
-    plays = models.BigIntegerField()
-    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    duration = models.FloatField()
+    plays = models.BigIntegerField(default=0)
+    creator = models.ForeignKey(User, default=None, null=True, on_delete=models.SET_NULL)
     tags = models.ManyToManyField(Tag)
 
     class Meta:

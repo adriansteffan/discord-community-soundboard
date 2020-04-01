@@ -158,6 +158,8 @@ in the ```backend``` directory.
 By default, the server will be listening on [http://localhost:8080](http://localhost:8080)
 
 
+TODO usage e.g. python manage.py migrate_clips /path/
+
 ## Authors
 
 * **Adrian Steffan** - [adriansteffan](https://github.com/adriansteffan)

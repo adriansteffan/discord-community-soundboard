@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Tag, SoundClip
+
+admin.site.register(Tag)
+admin.site.register(SoundClip)

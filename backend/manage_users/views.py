@@ -1,20 +1,27 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
 
+from django.contrib.auth.models import User
+
+from rolepermissions.decorators import has_permission_decorator
+from rolepermissions.roles import assign_role
+
+import keys
+from discord_bot.discord_interface.run_bot import bot
+from manage_users.models import Guild
+from backend.roles import default_roles
 
 import requests
-
-from discord_bot.discord_interface.run_bot import bot
-import keys
-from manage_users.models import Guild
 
 API_ENDPOINT = 'https://discordapp.com/api/v6'
 
 
-@api_view(['GET'])
-def hello(request):
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@has_permission_decorator('edit_roles')
+def edit_roles(request):
     return Response('Hello World')
 
 
@@ -53,7 +60,8 @@ def create_access(request):
             shared_guilds.append({'id': guild['id'], 'name': guild['name']})
 
     if len(shared_guilds) == 0:
-        return Response('Some Bad rejection')
+        # TODO include useful error message
+        return Response('Some bad rejection')
 
     response_user = requests.get('%s/users/@me' % API_ENDPOINT, headers=headers)
     user_id = response_user.json()['id']
@@ -62,6 +70,8 @@ def create_access(request):
     user_query = User.objects.filter(username=user_id)
     if not user_query.exists():
         user = User.objects.create_user(username=user_id)
+        for role in default_roles:
+            assign_role(user, role)
     else:
         user = user_query[0]
 

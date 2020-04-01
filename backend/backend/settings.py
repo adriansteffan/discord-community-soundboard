@@ -19,8 +19,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*', ]
 
-CORS_ORIGIN_ALLOW_ALL = True
-
 LOGIN_URL = ""
 
 
@@ -38,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
     'rest_framework',
+    'rolepermissions',
     'corsheaders',
 ]
 
@@ -122,6 +121,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
+# corsheaders settings
+CORS_ORIGIN_ALLOW_ALL = True
+
+# django-rest-framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -130,3 +133,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     )
 }
+
+
+# django-role-permission setting
+ROLEPERMISSIONS_MODULE = 'backend.roles'
+ROLEPERMISSIONS_REGISTER_ADMIN = True
+

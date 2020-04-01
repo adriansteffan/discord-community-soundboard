@@ -35,7 +35,7 @@ const mapDispatchToProps = (dispatch) => ({
 			console.log("success")
 		})
 		
-		xhr.open('POST', config.backendUrl+'/bot/playauth')
+		xhr.open('POST', config.backendUrl+'/bot/playauth');
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.setRequestHeader('Authorization','Token ' + token);
 		xhr.send()

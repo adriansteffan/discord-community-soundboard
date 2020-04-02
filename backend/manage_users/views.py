@@ -4,16 +4,20 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 
 from backend.roles import has_permission
 from rolepermissions.roles import assign_role, remove_role
 from rolepermissions.checkers import has_role
+
 
 import keys
 from discord_bot.discord_interface.run_bot import bot
 from manage_users.models import Guild
 from backend.roles import default_roles
 from backend.utils import post_fields
+
+
 
 import requests
 
@@ -25,7 +29,22 @@ API_ENDPOINT = 'https://discordapp.com/api/v6'
 @post_fields(['user_id', 'action', 'role'])
 @has_permission('edit_roles')
 def edit_roles(request):
-    return Response('Not implemented yet')
+    target = User.objects.get(username=request.data['user_id'])
+    action = request.data['action']
+    role = request.data['role']
+
+    # Check if the user is allowed to edit the role of the target
+    if has_role(target, 'owner') or (has_role(target, 'moderator') and not has_role(request.user, 'owner')):
+        raise PermissionDenied
+
+    if action == 'remove':
+        remove_role(target, role)
+    elif action == 'assign':
+        remove_role(target, role)
+    else:
+        return Response('Invalid action')
+
+    return Response('Success')
 
 
 @api_view(['POST'])
@@ -71,13 +90,11 @@ def create_access(request):
     user_id = response_user.json()['id']
 
     # check if user exists in database, creating one if necessary
-    user_query = User.objects.filter(username=user_id)
-    if not user_query.exists():
+    user = User.objects.get(username=user_id)
+    if not user:
         user = User.objects.create_user(username=user_id)
         for role in default_roles:
             assign_role(user, role)
-    else:
-        user = user_query[0]
 
     # caches the current guilds of a user for a login - use a real caching mechanism if deployed at large scale
     user.profile.guilds.clear()

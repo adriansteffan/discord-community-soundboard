@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
 
-from backend.roles import has_permission_decorator
+from backend.roles import has_permission
 from rolepermissions.roles import assign_role, remove_role
 from rolepermissions.checkers import has_role
 
@@ -21,7 +21,7 @@ API_ENDPOINT = 'https://discordapp.com/api/v6'
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@has_permission_decorator('edit_roles')
+@has_permission('edit_roles')
 def edit_roles(request):
     return Response('Hello World')
 

@@ -10,7 +10,6 @@ from rolepermissions.roles import AbstractUserRole
 from functools import wraps
 
 
-
 class Minimal(AbstractUserRole):
     available_permissions = {
         'play_sound_clip': True,
@@ -51,7 +50,7 @@ default_roles = ["minimal", "basic"]
 
 # We redefine the permission decorator to allow "Owner" users to access all functionality
 
-def has_permission_decorator(permission_name, redirect_to_login=None):
+def has_permission(permission_name, redirect_to_login=None):
     def request_decorator(dispatch):
         @wraps(dispatch)
         def wrapper(request, *args, **kwargs):
@@ -69,3 +68,16 @@ def has_permission_decorator(permission_name, redirect_to_login=None):
             raise PermissionDenied
         return wrapper
     return request_decorator
+
+
+# Decorator that checks if the user is allowed to perform the task in the guild he specified
+
+def guild_check_decorator(f):
+    @wraps(f)
+    def wrapper(request, *args, **kwds):
+        guild_id = int(request.data['guild_id'])
+        for guild in request.user.profile.guilds.all():
+            if guild_id == guild.id:
+                return f(request, *args, **kwds)
+        raise PermissionDenied
+    return wrapper

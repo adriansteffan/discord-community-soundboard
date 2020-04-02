@@ -33,12 +33,12 @@ class YoutubeSong(AudioElement):
 
             }
             downloader = youtube_dl.YoutubeDL(ydl_opts)
-            extracted_info = downloader.extract_info(youtube_link, download=True)
+            extracted_info = downloader.extract_info(youtube_link, download=False)
         # "format" is not available for livestreams - redownload the page with no options
         except:
             try:
                 downloader = youtube_dl.YoutubeDL({})
-                extracted_info = downloader.extract_info(youtube_link, download=True)
+                extracted_info = downloader.extract_info(youtube_link, download=False)
 
             except:
                 next_song_callable(None)

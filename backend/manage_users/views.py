@@ -13,6 +13,7 @@ import keys
 from discord_bot.discord_interface.run_bot import bot
 from manage_users.models import Guild
 from backend.roles import default_roles
+from backend.utils import post_fields
 
 import requests
 
@@ -21,12 +22,14 @@ API_ENDPOINT = 'https://discordapp.com/api/v6'
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@post_fields(['user_id', 'action', 'role'])
 @has_permission('edit_roles')
 def edit_roles(request):
-    return Response('Hello World')
+    return Response('Not implemented yet')
 
 
 @api_view(['POST'])
+@post_fields(['code'])
 def create_access(request):
 
     # Get discord access token corresponding to the code by the auth

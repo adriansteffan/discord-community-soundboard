@@ -66,20 +66,23 @@ def create_access(request):
     response_access = requests.post('%s/oauth2/token' % API_ENDPOINT, data=data, headers=headers)
 
     # Use the access token to get the guilds the user is part of
-    # TODO check for missing access token
+    if response_access.status_code != 200:
+        return Response('Some bad rejection')
+
     headers = {
         "Authorization": ("Bearer " + str(response_access.json()['access_token']))
     }
     response_guilds = requests.get('%s/users/@me/guilds' % API_ENDPOINT, headers=headers)
+
+    if response_guilds.status_code != 200:
+        return Response('Some bad rejection')
 
     # A user is allowed a bot access token if he shares at least one guild with the bot
     shared_guilds = []
     bot_guild_ids = [guild.id for guild in bot.guilds]
 
     for guild in response_guilds.json():
-
         if int(guild['id']) in bot_guild_ids:
-
             shared_guilds.append({'id': guild['id'], 'name': guild['name']})
 
     if len(shared_guilds) == 0:
@@ -87,6 +90,10 @@ def create_access(request):
         return Response('Some bad rejection')
 
     response_user = requests.get('%s/users/@me' % API_ENDPOINT, headers=headers)
+
+    if response_user.status_code != 200:
+        return Response('Some bad rejection')
+
     user_id = response_user.json()['id']
 
     # check if user exists in database, creating one if necessary

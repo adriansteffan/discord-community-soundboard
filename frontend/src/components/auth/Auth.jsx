@@ -11,24 +11,34 @@ export class AuthContainer extends Component {
 	constructor(props) {
 		super(props);
 		
+		if (document.cookie != null){
 
+			let authToken = document.cookie.split(";")[0].split("=")[1];
+			this.props.setAuthToken(authToken);
+			return;
+
+		} 
+			
 		let query = new URLSearchParams(this.props.location.search);
 		let discordCode = query.get("code");
+		if(discordCode == null){
+			window.location.replace(config.oauthUrl+"&prompt=none");
+			return;
+		}
 
-		var xhr = new XMLHttpRequest()
-		
+		var xhr = new XMLHttpRequest();
 
 		xhr.addEventListener('load', () => {
-			
-			console.log(xhr.responseText)
-			this.props.setAuthToken(xhr.responseText.replace(/["']/g, ""));
-			
-			
+				
+			let authTokenClean = xhr.responseText.replace(/["']/g, "");
+			document.cookie = "authtoken="+authTokenClean;
+			this.props.setAuthToken(authTokenClean);
 		})
-		
-		xhr.open('POST', config.backendUrl+'/users/create_access')
+			
+		xhr.open('POST', config.backendUrl+'/users/create_access');
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.send("code="+discordCode+"&redirect_uri="+config.frontendUrl+"/auth")
+		xhr.send("code="+discordCode+"&redirect_uri="+config.frontendUrl+"/auth");
+		
 	}
 
 

@@ -21,13 +21,11 @@ function App() {
     <Provider store={store}>
       <Router>
         <Switch>
-          <Route path="/bot">
-            <FloatingMenu/>
+          <Route path="/bot" component={Bot}>
           </Route>
           <Route path="/auth" component={Auth}>
           </Route>
-          <Route path="/">
-            <Index/>
+          <Route path="/" component={Index}>
           </Route>
         </Switch>
       </Router>

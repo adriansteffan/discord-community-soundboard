@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { changeMode } from './../../actions.js'
 import { Redirect } from "react-router-dom";
-import config from '../../config.js'
 
 
 
@@ -15,12 +14,13 @@ export class IndexContainer extends Component {
 
 	render() {		
 
-		// Check if we are authenticated, redirect to discord otherwise
+		// Check if we are authenticated, redirect to auth otherwise
 		if (this.props.authToken){
 			return <Redirect to={"/bot"} />
 		}
 		else{
-			window.location.replace(config.oauthUrl+"&prompt=none");
+			return <Redirect to={"/auth"} />
+			
 		}
 	}
 

@@ -11,13 +11,11 @@ from rolepermissions.roles import assign_role, remove_role
 from rolepermissions.checkers import has_role
 
 
-import keys
+import config
 from discord_bot.discord_interface.run_bot import bot
 from manage_users.models import Guild
 from backend.roles import default_roles
 from backend.utils import post_fields
-
-
 
 import requests
 
@@ -53,8 +51,8 @@ def create_access(request):
 
     # Get discord access token corresponding to the code by the auth
     data = {
-        'client_id': keys.client_id,
-        'client_secret': keys.client_secret,
+        'client_id': config.client_id,
+        'client_secret': config.client_secret,
         'grant_type': 'authorization_code',
         'code': request.data['code'],
         'redirect_uri': request.data['redirect_uri'],
@@ -112,7 +110,7 @@ def create_access(request):
         user.profile.guilds.add(guild)
 
     # Check if the owner role status of the user is up to date and edit it if necessary
-    is_specified_as_owner = user_id in keys.bot_owners
+    is_specified_as_owner = user_id in config.bot_owners
     is_owner = has_role(user, "owner")
     if is_owner and not is_specified_as_owner:
         remove_role(user, 'owner')

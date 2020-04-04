@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import AuthView from './AuthView.jsx';
 import config from '../../config.js'
 import { Redirect } from "react-router-dom";
+import {getCookie} from './../../utils.js'
 
 
 
@@ -10,10 +11,8 @@ export class AuthContainer extends Component {
 	
 	constructor(props) {
 		super(props);
-		
-		if (document.cookie != null){
-
-			let authToken = document.cookie.split(";")[0].split("=")[1];
+		const authToken = getCookie("authToken");
+		if (authToken){
 			this.props.setAuthToken(authToken);
 			return;
 
@@ -21,10 +20,12 @@ export class AuthContainer extends Component {
 			
 		let query = new URLSearchParams(this.props.location.search);
 		let discordCode = query.get("code");
+		console.log("1");
 		if(discordCode == null){
 			window.location.replace(config.oauthUrl+"&prompt=none");
 			return;
 		}
+		console.log("2");
 
 		var xhr = new XMLHttpRequest();
 
@@ -43,6 +44,7 @@ export class AuthContainer extends Component {
 
 
 	render() {
+		
 		if (!this.props.authToken){
 			return (
 				<AuthView/>

@@ -1,20 +1,25 @@
 import React from 'react';
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import reducer from '../reducers/reducers'
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import reducer from '../reducers/reducers';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
-import FloatingMenu from './floating-menu/FloatingMenu.jsx'
-import Auth from './auth/Auth.jsx'
-import Index from './index/Index.jsx'
-import './App.css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faCheckSquare, faCogs, faUpload, faFileAudio} from '@fortawesome/free-solid-svg-icons'
 
-const store = createStore(reducer)
+import Auth from './auth/Auth.jsx';
+import Index from './index/Index.jsx';
+import './app.css';
+import Bot from './bot/Bot.jsx';
+
+library.add(fab, faCheckSquare, faCogs, faUpload, faFileAudio)
+
+const store = createStore(reducer);
 
 function App() {
   return (

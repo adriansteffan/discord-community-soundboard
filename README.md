@@ -96,7 +96,7 @@ manage.py collectstatic
 
 #### Next, you will need to configure secret keys for the project:
 
-In the ```backend``` folder, create a ```keys.py``` with the following structure:
+In the ```backend``` folder, create a ```config.py``` with the following structure:
 
 ```
 bot_token = "YOUR_BOT_TOKEN_HERE"
@@ -106,6 +106,8 @@ client_secret = "YOUR_CLIENT_SECRET_HERE"
 django_secret_key = "YOUR_SECRET_KEY_HERE"
 
 database_password = "your_password_here"
+database_host = "localhost"
+database_port = ''
 
 bot_owners = ["your_discord_account_id_here"]
 ```

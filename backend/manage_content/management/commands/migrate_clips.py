@@ -1,7 +1,7 @@
 import sys
 import os
 
-import keys
+import config
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 from mutagen.mp3 import MP3
@@ -38,8 +38,8 @@ class Command(BaseCommand):
 
             creator = None
 
-            if keys.bot_owners:
-                user_query = User.objects.filter(username=keys.bot_owners[0])
+            if config.bot_owners:
+                user_query = User.objects.filter(username=config.bot_owners[0])
                 if user_query.exists():
                     creator = user_query[0]
 

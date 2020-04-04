@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import NavbarView from './NavbarView.jsx'
 
 
 export class NavbarContainer extends Component {

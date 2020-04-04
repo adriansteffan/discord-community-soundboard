@@ -1,0 +1,9 @@
+var config = {};
+
+
+config.backendUrl = "YOUR_BACKEND_URL_HERE"; // use http://localhost:8080 for development
+config.frontendUrl = "YOUR_FRONTEND_URL_HERE"; // use http://localhost:3000 for development
+
+config.oauthUrl = "YOUR_OAUTH_LINK"
+
+export default configure;

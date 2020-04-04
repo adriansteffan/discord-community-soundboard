@@ -1,0 +1,11 @@
+bot_token = "YOUR_BOT_TOKEN_HERE"
+client_id = "YOUR_CLIENT_ID_HERE"
+client_secret = "YOUR_CLIENT_SECRET_HERE"
+
+django_secret_key = "YOUR_SECRET_KEY_HERE"
+
+database_password = "your_password_here"
+database_host = "localhost"
+database_port = ''
+
+bot_owners = ["your_discord_account_id_here"]

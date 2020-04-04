@@ -1,0 +1,28 @@
+version: '3'
+services:
+  frontend:
+    container_name: frontend
+    build: frontend
+    ports:
+      - "127.0.0.1:10500:80"
+  backend:
+    container_name: backend
+    build: backend
+    ports:
+      - "127.0.0.1:10501:8080"
+    volumes:
+      - ${PWD}/backend/config.py:/srv/backend/config.py
+      - backend-data:/srv/backend/clips
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres
+    image: postgres:10.12
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
+  backend-data:

@@ -1,6 +1,6 @@
 from django.db import models
 
-from discord_bot.models import SoundClip
+from discord_bot.models import Tag, SoundClip
 
 
 class Collection(models.Model):

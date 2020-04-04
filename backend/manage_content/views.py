@@ -7,6 +7,7 @@ from rolepermissions.permissions import available_perm_status
 from rolepermissions.roles import get_user_roles
 
 from backend.roles import has_permission
+from backend.utils import post_fields
 from discord_bot.serializers import SoundClipSerializer, TagSerializer
 from discord_bot.models import SoundClip, Tag
 
@@ -16,6 +17,7 @@ from manage_users.models import Guild, Profile
 from manage_content.serializers import CollectionSerializer
 from manage_content.models import Collection
 
+import re
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -40,10 +42,22 @@ def fetch_data(request):
     return JsonResponse(data, safe=False)
 
 @api_view(['POST'])
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
+@has_permission('manage_tags')
+@post_fields(['name'])
 def create_tag(request):
 
-    tag = request.data['tag']
+    name = request.data['name']
 
-    return Response(tag)
+    if not len(Tag.objects.filter(title=name)) == 0:
+        return Response('Tag already exists')
+
+    # check if tag consists of at least 1 regular character with regex
+    elif not bool(re.fullmatch(r'\w+', name)):
+        return Response('Tag is invalid.')
+
+    tag = Tag(title=name)
+    tag.save()
+
+    return Response('Tag uploaded successfully.')
 

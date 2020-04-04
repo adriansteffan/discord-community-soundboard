@@ -4,5 +4,6 @@ from manage_content import views
 
 urlpatterns = [
     path('fetch', views.fetch_data),
-    path('create_tag', views.create_tag)
+    path('create_tag', views.create_tag),
+    path('delete_tag', views.delete_tag)
 ]

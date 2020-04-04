@@ -39,5 +39,11 @@ def fetch_data(request):
     }
     return JsonResponse(data, safe=False)
 
+@api_view(['POST'])
+#@permission_classes([IsAuthenticated])
+def create_tag(request):
 
+    tag = request.data['tag']
+
+    return Response(tag)
 

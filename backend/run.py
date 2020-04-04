@@ -4,7 +4,6 @@ import threading
 
 from discord_bot.discord_interface import run_bot
 
-
 if __name__ == '__main__':
 
     # Start discord bot on separate thread

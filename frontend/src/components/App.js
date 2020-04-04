@@ -14,7 +14,7 @@ import { faCheckSquare, faCogs, faUpload, faFileAudio} from '@fortawesome/free-s
 
 import Auth from './auth/Auth.jsx';
 import Index from './index/Index.jsx';
-import './app.css';
+import './App.css';
 import Bot from './bot/Bot.jsx';
 
 library.add(fab, faCheckSquare, faCogs, faUpload, faFileAudio)

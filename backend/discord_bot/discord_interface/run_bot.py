@@ -8,21 +8,22 @@ from discord_bot.discord_interface.audioelements.localclip import LocalClipHelpe
 
 from discord.ext.commands import CommandNotFound
 
+import asyncio
+
 
 initial_extensions = ['discord_bot.discord_interface.commands.music', 'discord_bot.discord_interface.commands.general']
 bot = commands.Bot(command_prefix="!", pm_help=True)
 
-bot_event_loop = bot.loop  # for exposing the bot event loop to the web api
 
-
-def start():
+def start_bot_routine(loop):
     for extension in initial_extensions:
         try:
             bot.load_extension(extension)
         except Exception as e:
             print(e)
 
-    bot.run(TOKEN, bot=True, reconnect=True)
+    loop.run_until_complete(bot.start(TOKEN))
+    #bot.run(TOKEN, bot=True, reconnect=True)
 
 
 @bot.event

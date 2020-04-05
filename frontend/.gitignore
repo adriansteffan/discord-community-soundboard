@@ -24,3 +24,4 @@ yarn-error.log*
 
 # deployment specific config
 config.js
+src/copied_config.js

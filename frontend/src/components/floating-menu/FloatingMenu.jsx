@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import FloatingMenuView from './FloatingMenuView.jsx';
 import { changeMode } from './../../actions.js'
-import config from '../../config.js'
+import config from '../../copied_config.js'
 
 
 

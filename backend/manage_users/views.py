@@ -105,7 +105,7 @@ def create_access(request):
     user.profile.guilds.clear()
 
     for guild_dict in shared_guilds:
-        guild = Guild(id=guild_dict['id'], name=guild_dict['name'])
+        guild = Guild(id=str(guild_dict['id']), name=guild_dict['name'])
         guild.save()
         user.profile.guilds.add(guild)
 

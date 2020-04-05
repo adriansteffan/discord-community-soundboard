@@ -32,7 +32,7 @@ cd frontend
 npm install
 ```
 
-In the ```src``` directory, create a ```config.js``` with the following structure:
+In the ```frontend``` directory, create a ```config.js``` with the following structure:
 
 ```
 var config = {};

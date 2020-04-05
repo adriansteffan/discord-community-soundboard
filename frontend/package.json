@@ -14,13 +14,13 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "renamer": "^1.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts start",
+    "build": "copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts build",
+    "test": "copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"

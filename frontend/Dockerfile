@@ -9,7 +9,7 @@ RUN apt-get install -y nodejs
 WORKDIR /srv/frontend
 COPY . .
 RUN npm install
-COPY config.js /srv/frontend/src/config.js
+#COPY config.js /srv/frontend/src/copied_config.js
 RUN npm run build
 RUN a2enmod rewrite
 RUN sed -i 's%/var/www/html%/srv/frontend/build%g' /etc/apache2/sites-available/000-default.conf

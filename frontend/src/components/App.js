@@ -1,6 +1,7 @@
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import reducer from '../reducers/reducers';
 import {
   BrowserRouter as Router,
@@ -19,7 +20,7 @@ import Bot from './bot/Bot.jsx';
 
 library.add(fab, faCheckSquare, faCogs, faUpload, faFileAudio)
 
-const store = createStore(reducer);
+const store = createStore(reducer,applyMiddleware(thunk));
 
 function App() {
   return (

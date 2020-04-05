@@ -28,7 +28,7 @@ export class IndexContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
-	authToken: state.authInformation.token
+	authToken: state.currentInformation.authToken
 });
 
 const mapDispatchToProps = (dispatch) => ({

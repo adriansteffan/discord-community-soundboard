@@ -1,0 +1,65 @@
+@media only screen and (min-width:600px){
+    .container{
+        margin-left: 5rem;
+    }
+}
+
+
+
+
+.soundclip-button-grid{
+    display: grid;
+    gap: 1rem;
+
+    grid-auto-rows: minmax(160px, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+
+    --stagger-delay : 50ms;
+}
+
+@keyframes cardEntrance {
+    from{
+        opacity: 0;
+        transform: scale(0.3);
+        filter: hue-rotate(180deg);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
+        filter: hue-rotate(0deg);
+    }
+}
+
+
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: #fff;
+    box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    transition: all 500ms;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    animation: cardEntrance 700ms ease-out;
+    animation-fill-mode: backwards;
+    background-color: rgb(36, 243, 147);
+ }
+
+ // Somewhat hacky solution
+ @for $i from 1 through 2000 {
+    .card:nth-child(#{$i}) {
+        animation-delay: calc(#{$i}*var(--stagger-delay));
+    }
+}
+
+ 

@@ -95,11 +95,13 @@ def create_access(request):
     user_id = response_user.json()['id']
 
     # check if user exists in database, creating one if necessary
-    user = User.objects.get(username=user_id)
-    if not user:
+    query = User.objects.filter(username=user_id)
+    if not query.exists():
         user = User.objects.create_user(username=user_id)
         for role in default_roles:
             assign_role(user, role)
+    else:
+        user = query[0]
 
     # caches the current guilds of a user for a login - use a real caching mechanism if deployed at large scale
     user.profile.guilds.clear()

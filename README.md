@@ -36,12 +36,9 @@ These steps are the same for both deployment and development setups.
 
 First of all, change the value of `POSTGRES_PASSWORD` in  `.env.template` to the password specified in `config.py`  and rename the file to `.env`
 
-For deployment on your Linux machine, you will need both `docker` and `docker-compose`, so run your distributions equivalent of 
-```
-apt-get install docker docker-compose
-```
+For deployment on your Linux machine, you will need both [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
 
-To then build the docker images, run 
+To build the docker images, run 
 
 ```
 docker-compose build
@@ -64,7 +61,7 @@ docker-compose down
 ```
 
 The frontend and backend will be attached to 127.0.0.1:1050 and 127.0.0.1:1051, respectively.
-Use Virtualhosts (Apache) or Server Blocks (Nginx) to expose these to the outside.
+Use Virtualhosts (Apache) or Server Blocks (Nginx) with reverse proxy to expose these to the outside.
 
 ### Updating
 

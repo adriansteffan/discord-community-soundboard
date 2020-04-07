@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -33,16 +34,16 @@ def edit_roles(request):
 
     # Check if the user is allowed to edit the role of the target
     if has_role(target, 'owner') or (has_role(target, 'moderator') and not has_role(request.user, 'owner')):
-        raise PermissionDenied
+        raise Response('Not allowed to change role of target user', status=status.HTTP_403_FORBIDDEN)
 
     if action == 'remove':
         remove_role(target, role)
     elif action == 'assign':
         remove_role(target, role)
     else:
-        return Response('Invalid action')
+        return Response('Invalid action', status=status.HTTP_404_NOT_FOUND)
 
-    return Response('Success')
+    return Response('Success', status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -65,7 +66,7 @@ def create_access(request):
 
     # Use the access token to get the guilds the user is part of
     if response_access.status_code != 200:
-        return Response('Some bad rejection')
+        return Response('Bad discord code', status=status.HTTP_400_BAD_REQUEST)
 
     headers = {
         "Authorization": ("Bearer " + str(response_access.json()['access_token']))
@@ -73,7 +74,7 @@ def create_access(request):
     response_guilds = requests.get('%s/users/@me/guilds' % API_ENDPOINT, headers=headers)
 
     if response_guilds.status_code != 200:
-        return Response('Some bad rejection')
+        return Response('Bad access token', status=status.HTTP_400_BAD_REQUEST)
 
     # A user is allowed a bot access token if he shares at least one guild with the bot
     shared_guilds = []
@@ -84,13 +85,12 @@ def create_access(request):
             shared_guilds.append({'id': guild['id'], 'name': guild['name']})
 
     if len(shared_guilds) == 0:
-        # TODO include useful error message
-        return Response('Some bad rejection')
+        return Response('User does not share server with bot', status=status.HTTP_403_FORBIDDEN)
 
     response_user = requests.get('%s/users/@me' % API_ENDPOINT, headers=headers)
 
     if response_user.status_code != 200:
-        return Response('Some bad rejection')
+        return Response('Bad access token', status=status.HTTP_400_BAD_REQUEST)
 
     user_id = response_user.json()['id']
 
@@ -126,4 +126,4 @@ def create_access(request):
     token = Token.objects.create(user=user)
 
     #  send back bot access token
-    return Response(token.key)
+    return Response(token.key, status=status.HTTP_200_OK)

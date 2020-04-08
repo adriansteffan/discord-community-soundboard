@@ -3,7 +3,7 @@
     .navbar {
         bottom: 0;
         width:100vw;
-        height: 3rem;
+        height: 5.5vh;
     }
 
     .navbar-nav {
@@ -24,7 +24,7 @@
 
     .navbar {
         top: 0;
-        width:5rem;
+        width:8vh;
         height: 100vh;
     }
 
@@ -35,7 +35,7 @@
     }
 
     .nav-item{
-        margin-top: 5vh;
+        margin-top: 4.5vh;
     }
 
     .fa-icon {

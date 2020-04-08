@@ -14,7 +14,7 @@ export class BotContainer extends Component {
 
 	render() {	
 		console.log(this.props.authToken);
-		if(this.props.authToken === null){
+		if(this.props.authToken === null || this.props.authTokenExpired){
 			return (
 				<Redirect to={"/auth"} />
 			);
@@ -29,7 +29,8 @@ export class BotContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
-	authToken: state.currentInformation.authToken
+	authToken: state.currentInformation.authToken,
+	authTokenExpired: state.currentInformation.authTokenExpired
 	
 });
 

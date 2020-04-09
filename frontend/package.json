@@ -11,16 +11,20 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "copyfiles": "^2.2.0",
+    "del-cli": "^3.0.0",
+    "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "redux-thunk": "^2.3.0",
     "renamer": "^1.1.4"
   },
   "scripts": {
-    "start": "copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts start",
-    "build": "copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts build",
-    "test": "copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts test"
+    "start": "del-cli src/copied_config.js && copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts start",
+    "build": "del-cli src/copied_config.js && copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts build",
+    "test": "del-cli src/copied_config.js && copyfiles config.js src && cd src && renamer --find config.js --replace copied_config.js * && cd .. && react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"

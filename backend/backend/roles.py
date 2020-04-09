@@ -75,9 +75,9 @@ def has_permission(permission_name, redirect_to_login=None):
 def guild_check_decorator(f):
     @wraps(f)
     def wrapper(request, *args, **kwds):
-        guild_id = int(request.data['guild_id'])
+        guild_id = request.data['guild_id']
         for guild in request.user.profile.guilds.all():
-            if guild_id == guild.id:
+            if guild_id == str(guild.id):
                 return f(request, *args, **kwds)
         raise PermissionDenied
     return wrapper

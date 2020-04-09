@@ -8,7 +8,7 @@ from manage_content.models import Collection
 
 
 class Guild(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.TextField(primary_key=True)
     name = models.TextField()
 
     class Meta:

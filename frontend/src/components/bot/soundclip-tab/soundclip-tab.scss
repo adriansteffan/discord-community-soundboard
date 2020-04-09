@@ -1,0 +1,188 @@
+
+
+/* Desktop ad Tablet */
+@media only screen and (min-width:600px){
+   
+    .container{
+        // leave space for the navbar
+        margin-left: 8vh;
+
+        height: 100vh;
+        display: grid;
+        grid-template-areas: 
+        'cl tgs srchbr ctrl'
+        'crd crd crd crd';
+
+        grid-template-columns: 1fr 1fr 5fr 3fr;
+        grid-template-rows: 1fr, 9fr;
+    }
+
+}
+
+/* Mobile */
+@media only screen and (max-width:600px){
+
+    .container{
+        height: 94.5vh;
+        // leave space for the navbar
+        margin-bottom: 5.5vh;
+        display: grid;
+        grid-template-areas: 
+        'srchbr srchbr'
+        'cl tgs' 
+        'crd crd'
+        'ctrl ctrl';
+
+        grid-template-columns: auto auto;
+        grid-template-rows: 1fr,1fr,7fr,2fr;
+    }
+
+}
+
+
+.collection-dropdown{ 
+    grid-area: cl;
+   
+}
+
+.tags-dropdown{
+    grid-area: tgs;
+    
+}
+
+.searchbar {
+    grid-area: srchbr;
+    
+}
+
+.playback-control {
+    grid-area: ctrl;
+    
+}
+
+
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 1rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    width: 0.8fr;
+}
+
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+  
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd}
+
+.show {display:block;}
+
+
+.soundclip-button-grid{
+    grid-area: crd;
+
+    overflow: scroll;
+    overflow-x: hidden;
+
+    
+    padding: 3vh;
+    display: grid;
+    gap: 1rem;
+
+    grid-auto-rows: minmax(160px, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+
+    --stagger-delay : 50ms;
+}
+
+.soundclip-button-grid::-webkit-scrollbar{
+    width: 0.25rem;
+}
+  
+.soundclip-button-grid::-webkit-scrollbar-track {
+    background: #1e1e24;
+}
+  
+.soundclip-button-grid::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+}
+
+@keyframes cardEntrance {
+    from{
+        opacity: 0;
+        transform: scale(0.3);
+        filter: hue-rotate(180deg);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
+        filter: hue-rotate(0deg);
+    }
+}
+
+
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    color: #fff;
+    box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
+    height: 100%;
+    width: 100%;
+    /*border-radius: 4px;*/
+    transition: all 500ms;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    animation: cardEntrance 700ms ease-out;
+    animation-fill-mode: backwards;
+    background-color: rgb(36, 243, 147);
+    background-color: #0fb9b1;
+
+    cursor: pointer;
+ }
+
+ // replace with better animation later on
+ .card:hover {
+    font-size: 2.5rem;
+ }
+
+
+ // Somewhat hacky solution
+ @for $i from 1 through 2000 {
+    .card:nth-child(#{$i}) {
+        animation-delay: calc(#{$i}*var(--stagger-delay));
+    }
+}
+
+ 

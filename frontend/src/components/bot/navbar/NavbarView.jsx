@@ -9,7 +9,7 @@ export default (props) => {
 			<nav className="navbar">
 				<ul className="navbar-nav">
 					<li className="nav-item">
-						<FontAwesomeIcon icon={['fas','file-audio']} className="fa-icon"/>
+						<FontAwesomeIcon icon={['fas','bullhorn']} className="fa-icon"/>
 					</li>
 					<li className="nav-item">
 						<FontAwesomeIcon icon={['fab','youtube']} className="fa-icon"/>
@@ -18,7 +18,7 @@ export default (props) => {
 						<FontAwesomeIcon icon={['fas','upload']} className="fa-icon"/>
 					</li>
 					<li className="nav-item">
-						<FontAwesomeIcon icon={['fas','cogs']} className="fa-icon"/>
+						<FontAwesomeIcon icon={['fas','sliders-h']} className="fa-icon"/>
 					</li>
 				</ul>
 			</nav>

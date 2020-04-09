@@ -7,6 +7,7 @@ import os
 # Allows the bot to access the database in the async thread, rewrite on future implementation with asgi and channels
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
+
 class LocalClip(AudioElement):
 
     def __init__(self, path):
@@ -29,10 +30,12 @@ class LocalClipHelper:
         query = SoundClip.objects.filter(name=name)
 
         if not query.exists():
-            return
+            return False
 
         clip = LocalClip(query[0].path)
         await LocalClipHelper._add_clip_to_controller(audiocontroller, clip)
+
+        return True
 
     @staticmethod
     async def _add_clip_to_controller(audiocontroller, clip):

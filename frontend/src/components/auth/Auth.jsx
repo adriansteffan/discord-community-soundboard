@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import AuthView from './AuthView.jsx';
 import config from '../../copied_config.js'
 import { Redirect } from "react-router-dom";
+import {setAuthToken} from './../../actions.js'
 import {getCookie} from './../../utils.js'
 
 
@@ -11,21 +12,25 @@ export class AuthContainer extends Component {
 	
 	constructor(props) {
 		super(props);
-		const authToken = getCookie("authToken");
+		const authToken = getCookie("authtoken");
 		if (authToken){
 			this.props.setAuthToken(authToken);
+			this.state={authenticated: true};
 			return;
 
 		} 
 			
+		this.state={authenticated: false};
+
 		let query = new URLSearchParams(this.props.location.search);
 		let discordCode = query.get("code");
-		console.log("1");
+		
 		if(discordCode == null){
 			window.location.replace(config.oauthUrl+"&prompt=none");
 			return;
 		}
-		console.log("2");
+		
+		
 
 		var xhr = new XMLHttpRequest();
 
@@ -34,6 +39,7 @@ export class AuthContainer extends Component {
 			let authTokenClean = xhr.responseText.replace(/["']/g, "");
 			document.cookie = "authtoken="+authTokenClean;
 			this.props.setAuthToken(authTokenClean);
+			this.setState({authenticated: true})
 		})
 			
 		xhr.open('POST', config.backendUrl+'/users/create_access');
@@ -44,8 +50,7 @@ export class AuthContainer extends Component {
 
 
 	render() {
-		
-		if (!this.props.authToken){
+		if (!this.state.authenticated){
 			return (
 				<AuthView/>
 			);
@@ -58,18 +63,11 @@ export class AuthContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
-	authToken: state.authInformation.token
+	authToken: state.currentInformation.authToken
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	setAuthToken: (token) => {
-		
-			
-		dispatch({
-			type: "SET_AUTHTOKEN",
-			token: token,
-		})
-	},
+	setAuthToken: (token) => dispatch(setAuthToken(token)),
 });
 
 const Auth = connect(

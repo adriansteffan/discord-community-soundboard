@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
+from rest_framework import status
 from rolepermissions.permissions import available_perm_status
 from rolepermissions.roles import get_user_roles
 
@@ -51,15 +52,15 @@ def create_tag(request):
     name = request.data['name']
 
     if not len(Tag.objects.filter(title=name)) == 0:
-        return Response('Tag already exists.')
+        return Response('Tag already exists.', status=status.HTTP_409_CONFLICT)
 
     # check if tag consists of at least 1 regular character with regex
     elif not bool(re.fullmatch(r'\w+', name)):
-        return Response('Tag is invalid.')
+        return Response('Tag is invalid.', status=status.HTTP_400_BAD_REQUEST)
 
     Tag(title=name).save()
 
-    return Response('Tag created successfully.')
+    return Response('Tag uploaded successfully.', status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -70,11 +71,11 @@ def delete_tag(request):
     name = request.data['name']
 
     if len(Tag.objects.filter(title=name)) == 0:
-        return Response('Tag does not exist.')
+        return Response('Tag does not exist.', status=status.HTTP_404_NOT_FOUND)
 
     Tag.objects.filter(title=name).delete()
 
-    return Response('Tag deleted successfully.')
+    return Response('Tag deleted successfully.', status=status.HTTP_200_OK)
 
 
 # TODO need form-data POST request to upload a file

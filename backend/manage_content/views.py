@@ -45,9 +45,9 @@ def fetch_data(request):
 
 
 @api_view(['POST'])
-#@permission_classes([IsAuthenticated])
-#@has_permission('manage_tags')
-#@post_fields(['name'])
+@permission_classes([IsAuthenticated])
+@has_permission('manage_tags')
+@post_fields(['name'])
 def create_tag(request):
     name = request.data['name']
 

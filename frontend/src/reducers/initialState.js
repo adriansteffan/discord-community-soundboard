@@ -2,13 +2,14 @@ const initialState = {
 
 	currentInformation: {
 		authToken : null,
+		authTokenExpired: false,
 		guild: null,
 		collection: [],
 		tags: [],
 		filter: null,
 	},
 	menu: {
-		selectedTab: 'soundclips', // other options: youtube, upload, settings
+		activeTab: 'soundclips', // other options: youtube, upload, settings
 	},
 	backendData:
 	{

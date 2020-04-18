@@ -4,6 +4,8 @@ import {CHANGE_TAB, SET_AUTHTOKEN, PLAY_SOUNDCLIP, SET_CURRENT_GUILD, UPDATE_PAY
 
 export function menu(state = initialState.menu, action) {
 	switch (action.type) {
+		case CHANGE_TAB:
+			return {...state, activeTab: action.tab};
 		default:
 			return state;
 	}
@@ -14,7 +16,7 @@ export function currentInformation(state = initialState.currentInformation, acti
 		case SET_CURRENT_GUILD:
 			return {...state, guild: action.guild};
 		case SET_AUTHTOKEN:
-			return {...state, authToken: action.token};
+			return {...state, authToken: action.token, authTokenExpired: action.isExpired};
 		default:
 			return state;
 	}

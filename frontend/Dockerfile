@@ -3,13 +3,12 @@ MAINTAINER github.com/adriansteffan
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y git python3.7 curl software-properties-common apache2
+RUN apt-get install -y curl software-properties-common apache2
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 WORKDIR /srv/frontend
 COPY . .
 RUN npm install
-#COPY config.js /srv/frontend/src/copied_config.js
 RUN npm run build
 RUN a2enmod rewrite
 RUN sed -i 's%/var/www/html%/srv/frontend/build%g' /etc/apache2/sites-available/000-default.conf

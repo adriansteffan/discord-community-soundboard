@@ -62,7 +62,7 @@
 
 
 .dropbtn {
-    background-color: #3498DB;
+    background-color: #99aab5;
     color: white;
     padding: 1rem;
     font-size: 1rem;
@@ -73,7 +73,7 @@
 
 
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
+    background-color: #99aab9;
 }
   
 
@@ -156,7 +156,7 @@
     box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
     height: 100%;
     width: 100%;
-    /*border-radius: 4px;*/
+    border-radius: 4px;
     transition: all 500ms;
     overflow: hidden;
 
@@ -167,7 +167,7 @@
     animation: cardEntrance 700ms ease-out;
     animation-fill-mode: backwards;
     background-color: rgb(36, 243, 147);
-    background-color: #0fb9b1;
+    background-color: #7289da;
 
     cursor: pointer;
  }

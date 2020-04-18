@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import BotView from './BotView.jsx';
-import {fetchBackendPayload} from './../../actions.js';
+import {fetchBackendPayload, changeTab} from './../../actions.js';
 import { Redirect } from "react-router-dom";
 
 
@@ -21,7 +21,7 @@ export class BotContainer extends Component {
 		}
 		this.props.fetchBackednPayload();
 		return (
-			<BotView activeTab={'soundclips'}/>
+			<BotView activeTab={this.props.activeTab}/>
 		);
 	}
 
@@ -30,7 +30,8 @@ export class BotContainer extends Component {
 
 const mapStateToProps = (state) => ({
 	authToken: state.currentInformation.authToken,
-	authTokenExpired: state.currentInformation.authTokenExpired
+	authTokenExpired: state.currentInformation.authTokenExpired,
+	activeTab: state.menu.activeTab,
 	
 });
 

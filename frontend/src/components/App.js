@@ -11,14 +11,14 @@ import {
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faCheckSquare, faCogs, faUpload, faFileAudio} from '@fortawesome/free-solid-svg-icons'
+import { faCheckSquare, faUpload, faStopCircle, faForward, faBackward, faPause, faPlay, faBullhorn, faSlidersH} from '@fortawesome/free-solid-svg-icons'
 
 import Auth from './auth/Auth.jsx';
 import Index from './index/Index.jsx';
 import './App.css';
 import Bot from './bot/Bot.jsx';
 
-library.add(fab, faCheckSquare, faCogs, faUpload, faFileAudio)
+library.add(fab, faCheckSquare, faUpload, faStopCircle, faForward, faBackward, faPause, faPlay, faBullhorn, faSlidersH)
 
 const store = createStore(reducer,applyMiddleware(thunk));
 

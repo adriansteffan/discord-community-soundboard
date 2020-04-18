@@ -3,9 +3,9 @@
   font-family: 'Open Sans';
   --text-primary: #b6b6b6;
   --text-secondary: #ececec;
-  --bg-primary: #23232e;
+  --bg-primary: #2c2f33;
   --bg-secondary: #141418;
-  --accent-primary:#008080;
+  --accent-primary: #23272a;
 
   --transition-speed: 200ms;
 }
@@ -18,18 +18,6 @@ body {
   background-color: var(--bg-primary);
   margin: 0;
   padding: 0;
-}
-
-body::-webkit-scrollbar{
-  width: 0.25rem;
-}
-
-body::-webkit-scrollbar-track {
-  background: #1e1e24;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: var(--accent-primary);
 }
 
 .App {

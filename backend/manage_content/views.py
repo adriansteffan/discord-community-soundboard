@@ -19,7 +19,8 @@ from manage_content.serializers import CollectionSerializer
 from manage_content.models import Collection
 
 import re
-import inspect, os
+import os
+from mutagen.mp3 import MP3
 
 
 @api_view(['GET'])
@@ -105,18 +106,53 @@ def add_tag(request):
                     status=status.HTTP_200_OK)
 
 
-# TODO need form-data POST request to upload a file
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# @has_permission('upload_sound_clip')
-# @post_fields(['name', 'file', 'tags'])
+@permission_classes([IsAuthenticated])
+@has_permission('upload_sound_clip')
+@post_fields(['name'])
 def upload_sound_clip(request):
+
+    CLIP_DIRECTORY = 'clips'
+
+    # check for missing key - not covered by post_fields as that only checks .data
+    if 'file' not in request.FILES:
+        return Response('No file provided.', status=status.HTTP_400_BAD_REQUEST)
+
+    file = request.FILES['file']
+
+    if not file:
+        return Response('Could not load file.', status=status.HTTP_400_BAD_REQUEST)
+
+    if not file.name.endswith('.mp3'):
+        return Response('file needs to be mp3.', status=status.HTTP_400_BAD_REQUEST)
+
     name = request.data['name']
-    file = request.data['file']
-    tags = request.data['tags']
+    if not re.match('^\w+$', name) or len(name) == 0:
+        return Response('Invalid SoundClip name.', status=status.HTTP_400_BAD_REQUEST)
 
-    #file_path = open(r'C:\Dokumente', 'w')
-    #file_path.write(file)
-    #file_path.close()
+    query = SoundClip.objects.filter(name=name)
+    if query.exists():
+        return Response('SoundClip with the name already exists.', status=status.HTTP_409_CONFLICT)
 
-    return Response("File '{}' uploaded successfully".format(name))
+    #tags = request.data['tags']
+
+    if not os.path.exists(CLIP_DIRECTORY):
+        os.mkdir(CLIP_DIRECTORY)
+
+    filename = name + ".mp3"
+    pathname = os.path.join(CLIP_DIRECTORY, filename)
+    with open(pathname, 'wb+') as temp_file:
+        for chunk in file.chunks():
+            temp_file.write(chunk)
+
+    try:
+        length = MP3(pathname).info.length
+    except:
+        length = 0.0
+
+    clip = SoundClip(name=name, path=pathname, duration=length, creator=request.user)
+    clip.save()
+
+    print(pathname)
+    print(length)
+    return Response("Soundclip '{}' uploaded successfully".format(name))

@@ -5,7 +5,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 
 from backend.roles import has_permission
 from rolepermissions.roles import assign_role, remove_role
@@ -14,7 +13,7 @@ from rolepermissions.checkers import has_role
 
 import config
 from discord_bot.discord_interface.run_bot import bot
-from manage_users.models import Guild
+from discord_bot.models import Guild
 from backend.roles import default_roles
 from backend.utils import post_fields
 
@@ -107,8 +106,7 @@ def create_access(request):
     user.profile.guilds.clear()
 
     for guild_dict in shared_guilds:
-        guild = Guild(id=str(guild_dict['id']), name=guild_dict['name'])
-        guild.save()
+        guild = Guild.objects.filter(id=str(guild_dict['id']))[0]
         user.profile.guilds.add(guild)
 
     # Check if the owner role status of the user is up to date and edit it if necessary

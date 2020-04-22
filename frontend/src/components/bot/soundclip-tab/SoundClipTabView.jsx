@@ -4,7 +4,7 @@ import PlaybackControl from './../playback-control/PlaybackControl.jsx';
 
 export default (props) => {
 	
-	const {soundclips} = props;
+	const {soundclips,onFilterTextChange} = props;
 	const soundClipButtons = [];
 
   	soundclips.forEach(item => soundClipButtons.push(<div className="card" onClick={item.onClick} key={item.key}>{item.name}</div>))
@@ -30,7 +30,7 @@ export default (props) => {
 			</div>
 
 
-			<input type="text" placeholder="Filter..." className="searchbar"/>
+			<input type="text" placeholder="Filter..." className="searchbar" onChange={onFilterTextChange}/>
 			
 
 			<PlaybackControl classname="playback-control"/>

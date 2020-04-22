@@ -10,6 +10,7 @@ export class SoundClipTabContainer extends Component {
 	
 	constructor(props) {
 		super(props);
+		this.state={filterWord: ""} 
 	}
 
 	soundClipRenderData(rawSoundClip, index){
@@ -20,9 +21,22 @@ export class SoundClipTabContainer extends Component {
 		}
 	}
 
-	render() {		
+	filterSoundClips(filterWord, soundclips){
+		return soundclips.filter(clips => clips.name.includes(filterWord));
+	}
+
+	onFilterTextChange(event){
+		this.setState({...this.state, filterWord: event.target.value});
+	}
+
+	render() {	
+		
+		const filteredSoundClipRenders = this.filterSoundClips(this.state.filterWord, this.props.rawSoundclips).map(this.soundClipRenderData.bind(this));
 		return (
-			<SoundClipTabView soundclips={this.props.rawSoundclips.map(this.soundClipRenderData.bind(this))}/>
+			<SoundClipTabView 
+				soundclips={filteredSoundClipRenders}
+				onFilterTextChange={this.onFilterTextChange.bind(this)}
+			/>
 		);
 	}
 
@@ -30,7 +44,6 @@ export class SoundClipTabContainer extends Component {
 
 
 const mapStateToProps = (state) => {
-	console.log(state);
 	return {
 		rawSoundclips: state.backendData.payload.sound_clips,
 	}

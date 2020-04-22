@@ -6,7 +6,6 @@ const initialState = {
 		guild: null,
 		collection: [],
 		tags: [],
-		filter: null,
 	},
 	menu: {
 		activeTab: 'soundclips', // other options: youtube, upload, settings

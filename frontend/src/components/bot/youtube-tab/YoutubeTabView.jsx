@@ -1,5 +1,5 @@
 import React from 'react';
-import './youtube-tab.scss';
+import './youtube-tab.css';
 
 export default (props) => {
 

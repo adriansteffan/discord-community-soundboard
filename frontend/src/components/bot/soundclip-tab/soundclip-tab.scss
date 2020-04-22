@@ -4,9 +4,6 @@
 @media only screen and (min-width:600px){
    
     .container{
-        // leave space for the navbar
-        margin-left: 8vh;
-
         height: 100vh;
         display: grid;
         grid-template-areas: 
@@ -24,7 +21,6 @@
 
     .container{
         height: 94.5vh;
-        // leave space for the navbar
         margin-bottom: 5.5vh;
         display: grid;
         grid-template-areas: 
@@ -166,8 +162,7 @@
 
     animation: cardEntrance 700ms ease-out;
     animation-fill-mode: backwards;
-    background-color: rgb(36, 243, 147);
-    background-color: #7289da;
+    background-color: var(--accent-secondary);
 
     cursor: pointer;
  }
@@ -175,6 +170,9 @@
  // replace with better animation later on
  .card:hover {
     font-size: 2.5rem;
+    overflow: visible;
+    z-index: 99999;
+    transition: 600ms;
  }
 
 

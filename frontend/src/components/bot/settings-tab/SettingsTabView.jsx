@@ -1,5 +1,5 @@
 import React from 'react';
-import './settings-tab.scss';
+import './settings-tab.css';
 
 export default (props) => {
 	

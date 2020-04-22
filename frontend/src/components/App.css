@@ -6,12 +6,15 @@
   --bg-primary: #2c2f33;
   --bg-secondary: #141418;
   --accent-primary: #23272a;
+  --accent-secondary:#7289da;
 
   --transition-speed: 200ms;
 }
+
 html{
   margin: 0;
   padding: 0;
+  
 }
 body {
   color: var(--text-primary);
@@ -20,8 +23,17 @@ body {
   padding: 0;
 }
 
-.App {
-  text-align: center;
+
+
+.noselect {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
 }
 
+div, input { 
+  outline-style:none;
+}
 

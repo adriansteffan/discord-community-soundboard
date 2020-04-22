@@ -33,7 +33,7 @@ export default (props) => {
 			<input type="text" placeholder="Filter..." className="searchbar" onChange={onFilterTextChange}/>
 			
 
-			<PlaybackControl classname="playback-control"/>
+			<PlaybackControl className="playback-control"/>
 			
 			
 			<section className="soundclip-button-grid">

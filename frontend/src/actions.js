@@ -8,7 +8,7 @@ export const CONTROL_PLAYBACK = 'UPDATE_PAYLOAD';
 export const PLAY_SOUNDCLIP = 'PLAY_SOUNDCLIP';
 export const CHANGE_TAB = 'CHANGE_TAB';
 export const UPLOAD_CLIP = 'UPLOAD_CLIP';
-
+export const PLAY_YOUTUBE = "PLAY_YOUTUBE";
 
 
 export const fetchBackendPayload = () => {
@@ -147,13 +147,40 @@ export const uploadClip = (file, name) => {
             alert('Upload successfull');
 
         });
+
         xhr.open('POST', config.backendUrl+'/content/upload_sound_clip');
-        
         xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
         xhr.send(formData);
 
         return ({
             type: UPLOAD_CLIP,
+        })
+    };
+
+}
+
+export const playYoutube = (term) => {
+    return (dispatch, getState) => {
+        
+        const state = getState();
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener('load', () => {
+            if(xhr.status != 200){
+                alert('Playing the youtube audio failed');
+                return;
+            }
+
+        });
+
+        xhr.open('POST', config.backendUrl+'/bot/play_youtube');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
+        xhr.send("track="+term+"&guild_id="+state.currentInformation.guild.id);;
+
+        return ({
+            type: PLAY_YOUTUBE,
         })
     };
 }

@@ -24,18 +24,20 @@ const store = createStore(reducer,applyMiddleware(thunk));
 
 function App() {
   return (
-    <Provider store={store}>
-      <Router>
-        <Switch>
-          <Route path="/bot" component={Bot}>
-          </Route>
-          <Route path="/auth" component={Auth}>
-          </Route>
-          <Route path="/" component={Index}>
-          </Route>
-        </Switch>
-      </Router>
-    </Provider>
+    <div className="scrollable">
+      <Provider store={store}>
+        <Router>
+          <Switch>
+            <Route path="/bot" component={Bot}>
+            </Route>
+            <Route path="/auth" component={Auth}>
+            </Route>
+            <Route path="/" component={Index}>
+            </Route>
+          </Switch>
+        </Router>
+      </Provider>
+    </div>
   );
 }
 

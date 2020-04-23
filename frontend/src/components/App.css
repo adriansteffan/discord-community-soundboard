@@ -23,6 +23,11 @@ a{
   text-decoration: none;
 }
 
+
+html, body {
+  height: 100%;
+}
+
 html{
   margin: 0;
   padding: 0;
@@ -35,6 +40,16 @@ body {
   padding: 0;
 }
 
+/*disable hiding of searchbar on mobile*/
+.scrollable{
+  height: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+}
+
+.scrollable::-webkit-scrollbar{
+  display: none;
+}
 
 
 .noselect {

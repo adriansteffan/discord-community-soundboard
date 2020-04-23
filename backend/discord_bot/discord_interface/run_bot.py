@@ -31,13 +31,13 @@ async def on_ready():
 
     for guild in bot.guilds:
         print(guild.name)
-        await guild.me.edit(nick=DEFAULT_NICKNAME)
+        #await guild.me.edit(nick=DEFAULT_NICKNAME)
 
         voice_channel = guild.voice_channels[0]
         guild_query = Guild.objects.filter(id=str(guild.id))
 
         if not guild_query.exists():
-            guild = Guild(id=str(guild.id), connected_channel=str(voice_channel.id))
+            guild = Guild(id=str(guild.id), name=guild.name, connected_channel=str(voice_channel.id))
             guild.save()
 
         else:
@@ -66,7 +66,7 @@ async def on_guild_join(guild):
     try:
         voice_channel = guild.voice_channels[0]
         await guild_to_audiocontroller[guild].register_voice_channel(voice_channel)
-        guild = Guild(id=str(guild.id), connected_channel=str(voice_channel.id))
+        guild = Guild(id=str(guild.id), name=guild.name, connected_channel=str(voice_channel.id))
         guild.save()
 
     except:
@@ -89,7 +89,7 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    if member == bot.user and before.channel != after.channel:
+    if member == bot.user and before.channel != after.channel and after.channel:
         guild_query = Guild.objects.filter(id=str(member.guild.id))
         if guild_query.exists():
             db_guild = guild_query[0]

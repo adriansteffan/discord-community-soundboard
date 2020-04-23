@@ -33,7 +33,7 @@ def edit_roles(request):
 
     # Check if the user is allowed to edit the role of the target
     if has_role(target, 'owner') or (has_role(target, 'moderator') and not has_role(request.user, 'owner')):
-        raise Response('Not allowed to change role of target user', status=status.HTTP_403_FORBIDDEN)
+        return Response('Not allowed to change role of target user', status=status.HTTP_403_FORBIDDEN)
 
     if action == 'remove':
         remove_role(target, role)

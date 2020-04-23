@@ -27,7 +27,14 @@ API_ENDPOINT = 'https://discordapp.com/api/v6'
 @post_fields(['user_id', 'action', 'role'])
 @has_permission('edit_roles')
 def edit_roles(request):
-    target = User.objects.get(username=request.data['user_id'])
+
+    for user in User.objects.all():
+        print(user.username == request.data['user_id'])
+
+    target_query = User.objects.filter(username=request.data['user_id'])
+    if not target_query.exists():
+        return Response('User not found', status=status.HTTP_404_NOT_FOUND)
+    target = target_query[0]
     action = request.data['action']
     role = request.data['role']
 

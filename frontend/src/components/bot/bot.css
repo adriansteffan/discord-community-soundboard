@@ -8,7 +8,7 @@
 }
 
 /* Desktop ad Tablet */
-@media only screen and (min-width:600px){
+@media only screen and (min-width:800px){
    
     .content-container{
         margin-left: 8vh;
@@ -18,7 +18,7 @@
 }
 
 /* Mobile */
-@media only screen and (max-width:600px){
+@media only screen and (max-width:800px){
 
     .content-container{
         height: 94.5vh;

@@ -7,7 +7,7 @@ export default (props) => {
 	const {controlPlayback} = props;
 
 	return (
-		<div>
+		
 			<nav className="toolbar">
 				<ul className="toolbar-list">
 					<li className="toolbar-item">
@@ -27,7 +27,7 @@ export default (props) => {
 					</li>
 				</ul>
 			</nav>
-		</div>		
+			
 	);
 };
           

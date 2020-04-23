@@ -9,6 +9,7 @@
 .drop-container{
     width: 50%;
     height:50%;
+    cursor: pointer;
 }
 
 .drop-area{
@@ -18,5 +19,15 @@
     border : 2px solid var(--accent-secondary);
     border-radius: 1rem;
     border-style: dashed
+}
+
+.upload-file-container{
+    height: 100%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 }
 

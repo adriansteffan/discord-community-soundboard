@@ -13,7 +13,7 @@ export class NavbarContainer extends Component {
 
 	render() {		
 		return (
-			<NavbarView changeTab={this.props.changeTab}/>
+			<NavbarView activeRoles={this.props.activeRoles} changeTab={this.props.changeTab}/>
 		);
 	}
 
@@ -21,6 +21,7 @@ export class NavbarContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
+	activeRoles: state.backendData.payload.roles
 });
 
 const mapDispatchToProps = (dispatch) => ({

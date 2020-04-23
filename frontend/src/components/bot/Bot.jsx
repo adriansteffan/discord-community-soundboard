@@ -19,7 +19,10 @@ export class BotContainer extends Component {
 				<Redirect to={"/auth"} />
 			);
 		}
-		this.props.fetchBackednPayload();
+		if(!this.props.loaded){
+			this.props.fetchBackednPayload();
+		}
+		
 		return (
 			<BotView activeTab={this.props.activeTab}/>
 		);
@@ -32,6 +35,7 @@ const mapStateToProps = (state) => ({
 	authToken: state.currentInformation.authToken,
 	authTokenExpired: state.currentInformation.authTokenExpired,
 	activeTab: state.menu.activeTab,
+	loaded: state.backendData.loaded,
 	
 });
 

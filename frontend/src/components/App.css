@@ -5,10 +5,22 @@
   --text-secondary: #ececec;
   --bg-primary: #2c2f33;
   --bg-secondary: #141418;
+  --bg-accent: #484a4d;
+  --border-accent: #474a4d;
   --accent-primary: #23272a;
   --accent-secondary:#7289da;
 
-  --transition-speed: 200ms;
+  --transition-speed: 150ms;
+}
+
+ul{
+  list-style: none;
+  margin:0;
+  padding:0;
+}
+
+a{
+  text-decoration: none;
 }
 
 html{
@@ -33,7 +45,7 @@ body {
   -o-user-select: none;
 }
 
-div, input { 
+div, input, button { 
   outline-style:none;
 }
 

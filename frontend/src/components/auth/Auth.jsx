@@ -13,23 +13,23 @@ export class AuthContainer extends Component {
 	constructor(props) {
 		super(props);
 		const authToken = getCookie("authtoken");
-		if (authToken){
-			this.props.setAuthToken(authToken);
-			this.state={authenticated: true};
-			return;
-
-		} 
-			
-		this.state={authenticated: false};
 
 		let query = new URLSearchParams(this.props.location.search);
 		let discordCode = query.get("code");
+
+		if (authToken && !this.props.authTokenExpired && discordCode === null){
+			this.props.setAuthToken(authToken, false);
+			this.state={authenticated: true};
+			return;
+		} 
+			
 		
-		if(discordCode == null){
+		if(discordCode === null){
 			window.location.replace(config.oauthUrl+"&prompt=none");
 			return;
 		}
 		
+		this.state={authenticated: false};
 		
 
 		var xhr = new XMLHttpRequest();
@@ -38,7 +38,7 @@ export class AuthContainer extends Component {
 				
 			let authTokenClean = xhr.responseText.replace(/["']/g, "");
 			document.cookie = "authtoken="+authTokenClean;
-			this.props.setAuthToken(authTokenClean);
+			this.props.setAuthToken(authTokenClean, false);
 			this.setState({authenticated: true})
 		})
 			
@@ -63,11 +63,12 @@ export class AuthContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
-	authToken: state.currentInformation.authToken
+	authToken: state.currentInformation.authToken,
+	authTokenExpired: state.currentInformation.authTokenExpired
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	setAuthToken: (token) => dispatch(setAuthToken(token)),
+	setAuthToken: (token, isExpired) => dispatch(setAuthToken(token, isExpired)),
 });
 
 const Auth = connect(

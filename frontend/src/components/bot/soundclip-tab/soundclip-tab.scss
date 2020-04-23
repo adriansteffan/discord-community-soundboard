@@ -1,20 +1,129 @@
-@media only screen and (min-width:600px){
+
+
+/* Desktop ad Tablet */
+@media only screen and (min-width:800px){
+   
     .container{
-        margin-left: 5rem;
+        height: 100vh;
+        display: grid;
+        grid-template-areas: 
+        'cl tgs srchbr ctrl'
+        'crd crd crd crd';
+
+        grid-template-columns: 1fr 1fr 5fr 3fr;
+        grid-column-gap: 1em;
+        grid-template-rows: 1fr 15fr;
+    
+    }
+
+}
+
+.collection-dropdown{ 
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: cl;
+   
+}
+
+.tags-dropdown{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: tgs;
+    
+}
+
+/* Mobile */
+@media only screen and (max-width:800px){
+
+    .container{
+        height: 94.5vh;
+        margin-bottom: 5.5vh;
+        display: grid;
+
+        /*
+        grid-template-areas: 
+        'srchbr srchbr'
+        'cl tgs' 
+        'crd crd'
+        'ctrl ctrl';
+
+        grid-template-rows: 0.7fr 1fr 9fr 1fr;
+        */
+
+        grid-column-gap: 1em;
+        grid-template-rows: auto auto;
+
+        /*tmp, delet for final layout*/
+        grid-template-areas: 
+        'srchbr srchbr' 
+        'crd crd'
+        'ctrl ctrl';
+        
+        grid-template-rows: auto auto;
+        grid-template-rows: 0.7fr 9fr 1fr;
+        /********/
+    }
+
+    /*tmp, delet for final layout*/
+    .collection-dropdown,
+    .tags-dropdown{
+        display:none;
+    }
+    /********/
+
+    .card {
+        font-size: 1.2rem;
     }
 }
 
 
 
+.searchbar-container {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: srchbr;   
+}
+
+
+.playback-control {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: ctrl;
+    
+}
+
+
 
 .soundclip-button-grid{
+    grid-area: crd;
+    overflow: scroll;
+    overflow-x: hidden;
+
+    
+    padding: 3vh;
     display: grid;
     gap: 1rem;
 
-    grid-auto-rows: minmax(160px, 1fr);
+    grid-auto-rows: minmax(160px, 160px);
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 
     --stagger-delay : 50ms;
+}
+
+.soundclip-button-grid::-webkit-scrollbar{
+    width: 0.25rem;
+}
+  
+.soundclip-button-grid::-webkit-scrollbar-track {
+    background: #1e1e24;
+}
+  
+.soundclip-button-grid::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
 }
 
 @keyframes cardEntrance {
@@ -37,7 +146,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #fff;
     box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
     height: 100%;
@@ -52,8 +161,24 @@
 
     animation: cardEntrance 700ms ease-out;
     animation-fill-mode: backwards;
-    background-color: rgb(36, 243, 147);
+    background-color: var(--accent-secondary);
+
+    cursor: pointer;
  }
+
+ // replace with better animation later on
+ .card:hover {
+    font-size: 2.5rem;
+    overflow: visible;
+    z-index: 99999;
+    transition: 600ms;
+ }
+
+ .card:active{
+    filter: hue-rotate(180deg);
+    transition: 50ms;
+ }
+
 
  // Somewhat hacky solution
  @for $i from 1 through 2000 {

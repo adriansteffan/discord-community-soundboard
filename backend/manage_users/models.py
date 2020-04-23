@@ -3,19 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from discord_bot.models import SoundClip
+from discord_bot.models import SoundClip, Guild
 from manage_content.models import Collection
-
-
-class Guild(models.Model):
-    id = models.TextField(primary_key=True)
-    name = models.TextField()
-
-    class Meta:
-        ordering = ['id']
-
-    def __str__(self):
-        return self.id
 
 
 class Profile(models.Model):

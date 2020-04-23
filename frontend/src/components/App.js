@@ -11,31 +11,33 @@ import {
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faCheckSquare, faCogs, faUpload, faFileAudio} from '@fortawesome/free-solid-svg-icons'
+import { faCheckSquare, faUpload, faStopCircle, faForward, faBackward, faPause, faPlay, faBullhorn, faSlidersH, faTimes, faCaretDown} from '@fortawesome/free-solid-svg-icons'
 
 import Auth from './auth/Auth.jsx';
 import Index from './index/Index.jsx';
 import './App.css';
 import Bot from './bot/Bot.jsx';
 
-library.add(fab, faCheckSquare, faCogs, faUpload, faFileAudio)
+library.add(fab, faCheckSquare, faUpload, faStopCircle, faForward, faBackward, faPause, faPlay, faBullhorn, faSlidersH, faTimes, faCaretDown)
 
 const store = createStore(reducer,applyMiddleware(thunk));
 
 function App() {
   return (
-    <Provider store={store}>
-      <Router>
-        <Switch>
-          <Route path="/bot" component={Bot}>
-          </Route>
-          <Route path="/auth" component={Auth}>
-          </Route>
-          <Route path="/" component={Index}>
-          </Route>
-        </Switch>
-      </Router>
-    </Provider>
+    <div className="scrollable">
+      <Provider store={store}>
+        <Router>
+          <Switch>
+            <Route path="/bot" component={Bot}>
+            </Route>
+            <Route path="/auth" component={Auth}>
+            </Route>
+            <Route path="/" component={Index}>
+            </Route>
+          </Switch>
+        </Router>
+      </Provider>
+    </div>
   );
 }
 

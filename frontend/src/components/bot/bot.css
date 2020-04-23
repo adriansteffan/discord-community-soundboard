@@ -3,6 +3,30 @@
     padding: 0;
 }
 
+.content-container{
+
+}
+
+/* Desktop ad Tablet */
+@media only screen and (min-width:800px){
+   
+    .content-container{
+        margin-left: 8vh;
+        height: 100vh;
+    }
+
+}
+
+/* Mobile */
+@media only screen and (max-width:800px){
+
+    .content-container{
+        height: 94.5vh;
+        margin-bottom: 5.5vh;
+    }
+}
+
+
 main {
     margin: 0;
     padding: 0;

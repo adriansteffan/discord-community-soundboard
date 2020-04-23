@@ -1,6 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework import status
 
 from backend.roles import has_permission, guild_check_decorator
 from backend.utils import post_fields
@@ -30,8 +31,10 @@ def play_clip(request):
         clip_name
     )
 
-    asyncio.run_coroutine_threadsafe(cor, bot.loop)
-    return Response('Success')
+    success = asyncio.run_coroutine_threadsafe(cor, bot.loop).result()
+    if not success:
+        return Response('The requested clip does not exist', status=status.HTTP_404_NOT_FOUND)
+    return Response('Clip added to the queue', status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -52,7 +55,7 @@ def control_playback(request):
 
     elif control == 'pause':
         if guild.voice_client is None or not guild.voice_client.is_playing():
-            return Response('Nothing done')
+            return Response('Player is not playing', status=status.HTTP_404_NOT_FOUND)
         guild.voice_client.pause()
 
     elif control == 'resume':
@@ -61,18 +64,18 @@ def control_playback(request):
     elif control == 'skip':
         if guild.voice_client is None or (
                 not guild.voice_client.is_paused() and not guild.voice_client.is_playing()):
-            return Response('Nothing done')
+            return Response('Nothing to skip', status=status.HTTP_404_NOT_FOUND)
         guild.voice_client.stop()
 
     elif control == 'prev':
         cor = utils.guild_to_audiocontroller[guild].prev_song()
 
     else:
-        return Response('Invalid Control Command')
+        return Response('Invalid control command' + control, status=status.HTTP_404_NOT_FOUND)
 
     if cor:
         asyncio.run_coroutine_threadsafe(cor, bot.loop)
-    return Response('Success')
+    return Response('Success', status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])

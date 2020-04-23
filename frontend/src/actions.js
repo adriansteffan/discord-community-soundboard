@@ -4,9 +4,12 @@ export const SET_AUTHTOKEN = 'SET_AUTHTOKEN';
 export const FETCH_BACKEND_PAYLOAD = 'FETCH_BACKEND_PAYLOAD';
 export const SET_CURRENT_GUILD = 'SET_CURRENT_GUILD';
 export const UPDATE_PAYLOAD = 'UPDATE_PAYLOAD';
+export const CONTROL_PLAYBACK = 'UPDATE_PAYLOAD';
 export const PLAY_SOUNDCLIP = 'PLAY_SOUNDCLIP';
 export const CHANGE_TAB = 'CHANGE_TAB';
-
+export const UPLOAD_CLIP = 'UPLOAD_CLIP';
+export const PLAY_YOUTUBE = 'PLAY_YOUTUBE';
+export const EDIT_ROLE = 'EDIT_ROLE';
 
 
 export const fetchBackendPayload = () => {
@@ -17,12 +20,17 @@ export const fetchBackendPayload = () => {
 
         xhr.addEventListener('load', () => {
             console.log(xhr.response);
+
+            if(xhr.status != 200){
+                dispatch(setAuthToken(null, true));
+                return;
+            }
             const payload = JSON.parse(xhr.response);
             dispatch(updatePayload(payload));
             dispatch(setCurrentGuild(payload["guilds"][0]));
 
-            console.log(getState());
-        })
+
+        });
         xhr.open('GET', config.backendUrl+'/content/fetch');
         
         xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
@@ -46,15 +54,36 @@ export const updatePayload = (payload) => ({
 
     
 
-export const setAuthToken = (token) => ({ 
+export const setAuthToken = (token, isExpired) => ({ 
     type: SET_AUTHTOKEN,
-    token: token
+    token: token,
+    isExpired: isExpired,
 })
 
 export const changeTab = (tab) => ({
     type: CHANGE_TAB,
     tab: tab,
 })
+
+
+export const controlPlayback = (controlAction) => {
+    return (dispatch, getState) => {
+
+        const state = getState();
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', () => {});
+        xhr.open('POST', config.backendUrl+'/bot/control_playback');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
+        xhr.send("control="+controlAction+"&guild_id="+state.currentInformation.guild.id);
+
+        return {
+            type: CONTROL_PLAYBACK,
+        }
+    }
+}
+    
+    
     
 export const playSoundClip = (name) => {
     return (dispatch, getState) => {
@@ -74,4 +103,107 @@ export const playSoundClip = (name) => {
             name: name
         })
     };
+}
+
+export const uploadClip = (file, name) => {
+    return (dispatch, getState) => {
+        
+        if(file === null){
+            alert('No file provided!'); 
+            return;
+        }
+        
+        if(!file.name.endsWith('.mp3')){
+            alert('File needs to be mp3!'); 
+            return;
+        }
+
+        /* Check for valid name - at least one character and contains only alphanumeric chars and underscores*/
+        if (name == "" || name === null){ 
+            alert('no name provided'); 
+            return;
+        }
+        if (name.search(/^[a-zA-Z0-9_]+$/) === -1){ 
+            alert('Soundclip name can only contain letters, numbers and underscores!'); 
+            return;
+        }
+
+    
+        const state = getState();
+
+        let formData = new FormData();
+        formData.append('name', name);
+        formData.append('file', file);
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener('load', () => {
+            console.log(xhr.response);
+
+            if(xhr.status != 200){
+                alert('Upload failed');
+                return;
+            }
+
+            alert('Upload successfull');
+
+        });
+
+        xhr.open('POST', config.backendUrl+'/content/upload_sound_clip');
+        xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
+        xhr.send(formData);
+
+        return ({
+            type: UPLOAD_CLIP,
+        })
+    };
+
+}
+
+export const playYoutube = (term) => {
+    return (dispatch, getState) => {
+        
+        const state = getState();
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener('load', () => {
+            if(xhr.status != 200){
+                alert('Playing the youtube audio failed');
+                return;
+            }
+
+        });
+
+        xhr.open('POST', config.backendUrl+'/bot/play_youtube');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
+        xhr.send("track="+term+"&guild_id="+state.currentInformation.guild.id);;
+
+        return ({
+            type: PLAY_YOUTUBE,
+        })
+    };
+}
+
+export const editRole = (uid, action, role) => {
+    return (dispatch, getState) => {
+
+        const state = getState();
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', () => {
+            if(xhr.status != 200){
+                alert('Role edit failed!');
+                return;
+            }
+        });
+        xhr.open('POST', config.backendUrl+'/users/edit_roles');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
+        xhr.send("user_id="+uid+"&action="+action+"&role="+role);
+
+        return {
+            type: EDIT_ROLE,
+        }
+    }
 }

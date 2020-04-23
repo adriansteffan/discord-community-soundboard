@@ -1,11 +1,19 @@
+# these values need to be copied from your applications at https://discordapp.com/developers/applications
 bot_token = "YOUR_BOT_TOKEN_HERE"
 client_id = "YOUR_CLIENT_ID_HERE"
 client_secret = "YOUR_CLIENT_SECRET_HERE"
 
+# generate a secret at https://djecrety.ir/
 django_secret_key = "YOUR_SECRET_KEY_HERE"
 
+# choose a strong password for the django database user
 database_password = "your_password_here"
+
+# use "postgres" for deployment/self-hosting and "localhost" for development
 database_host = "localhost"
+
+# only change for custom setups, leave as '' by default
 database_port = ''
 
+# a list of user ids that have all permissions on the bot by default.
 bot_owners = ["your_discord_account_id_here"]

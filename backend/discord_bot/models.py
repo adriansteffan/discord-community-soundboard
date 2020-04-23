@@ -27,3 +27,15 @@ class SoundClip(models.Model):
         return self.name
 
 
+class Guild(models.Model):
+    id = models.TextField(primary_key=True)
+    name = models.TextField()
+    connected_channel = models.TextField()
+
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return self.id
+
+

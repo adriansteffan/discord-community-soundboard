@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import NavbarView from './NavbarView.jsx'
+import {changeTab} from './../../../actions.js'
 
 
 export class NavbarContainer extends Component {
@@ -12,7 +13,7 @@ export class NavbarContainer extends Component {
 
 	render() {		
 		return (
-			<NavbarView/>
+			<NavbarView activeRoles={this.props.activeRoles} changeTab={this.props.changeTab}/>
 		);
 	}
 
@@ -20,9 +21,11 @@ export class NavbarContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
+	activeRoles: state.backendData.payload.roles
 });
 
 const mapDispatchToProps = (dispatch) => ({
+	changeTab: (tab) => dispatch(changeTab(tab)),
 });
 
 const Navbar = connect(

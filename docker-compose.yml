@@ -1,12 +1,12 @@
 version: '3'
 services:
   frontend:
-    container_name: frontend
+    container_name: discordbot_frontend
     build: frontend
     ports:
       - "127.0.0.1:10500:80"
   backend:
-    container_name: backend
+    container_name: discordbot_backend
     build: backend
     ports:
       - "127.0.0.1:10501:8080"
@@ -16,7 +16,7 @@ services:
     depends_on:
       - postgres
   postgres:
-    container_name: postgres
+    container_name: discordbot_postgres
     image: postgres:10.12
     env_file:
       - .env

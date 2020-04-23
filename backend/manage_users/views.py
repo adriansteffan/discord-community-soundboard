@@ -2,9 +2,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 
 from backend.roles import has_permission
 from rolepermissions.roles import assign_role, remove_role
@@ -13,7 +13,7 @@ from rolepermissions.checkers import has_role
 
 import config
 from discord_bot.discord_interface.run_bot import bot
-from manage_users.models import Guild
+from discord_bot.models import Guild
 from backend.roles import default_roles
 from backend.utils import post_fields
 
@@ -33,16 +33,16 @@ def edit_roles(request):
 
     # Check if the user is allowed to edit the role of the target
     if has_role(target, 'owner') or (has_role(target, 'moderator') and not has_role(request.user, 'owner')):
-        raise PermissionDenied
+        return Response('Not allowed to change role of target user', status=status.HTTP_403_FORBIDDEN)
 
     if action == 'remove':
         remove_role(target, role)
     elif action == 'assign':
         remove_role(target, role)
     else:
-        return Response('Invalid action')
+        return Response('Invalid action', status=status.HTTP_404_NOT_FOUND)
 
-    return Response('Success')
+    return Response('Success', status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -65,7 +65,7 @@ def create_access(request):
 
     # Use the access token to get the guilds the user is part of
     if response_access.status_code != 200:
-        return Response('Some bad rejection')
+        return Response('Bad discord code', status=status.HTTP_400_BAD_REQUEST)
 
     headers = {
         "Authorization": ("Bearer " + str(response_access.json()['access_token']))
@@ -73,7 +73,7 @@ def create_access(request):
     response_guilds = requests.get('%s/users/@me/guilds' % API_ENDPOINT, headers=headers)
 
     if response_guilds.status_code != 200:
-        return Response('Some bad rejection')
+        return Response('Bad access token', status=status.HTTP_400_BAD_REQUEST)
 
     # A user is allowed a bot access token if he shares at least one guild with the bot
     shared_guilds = []
@@ -84,13 +84,12 @@ def create_access(request):
             shared_guilds.append({'id': guild['id'], 'name': guild['name']})
 
     if len(shared_guilds) == 0:
-        # TODO include useful error message
-        return Response('Some bad rejection')
+        return Response('User does not share server with bot', status=status.HTTP_403_FORBIDDEN)
 
     response_user = requests.get('%s/users/@me' % API_ENDPOINT, headers=headers)
 
     if response_user.status_code != 200:
-        return Response('Some bad rejection')
+        return Response('Bad access token', status=status.HTTP_400_BAD_REQUEST)
 
     user_id = response_user.json()['id']
 
@@ -107,8 +106,7 @@ def create_access(request):
     user.profile.guilds.clear()
 
     for guild_dict in shared_guilds:
-        guild = Guild(id=str(guild_dict['id']), name=guild_dict['name'])
-        guild.save()
+        guild = Guild.objects.filter(id=str(guild_dict['id']))[0]
         user.profile.guilds.add(guild)
 
     # Check if the owner role status of the user is up to date and edit it if necessary
@@ -126,4 +124,4 @@ def create_access(request):
     token = Token.objects.create(user=user)
 
     #  send back bot access token
-    return Response(token.key)
+    return Response(token.key, status=status.HTTP_200_OK)

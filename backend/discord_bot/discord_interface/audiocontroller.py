@@ -34,7 +34,11 @@ class AudioController(object):
             print(e)
         
     async def register_voice_channel(self, channel):
-        self.voice_client = await channel.connect()
+        try:
+            self.voice_client = await channel.connect(timeout=30.0)
+        except Exception as e:
+            # TODO send message to discord server
+            pass
 
     def next_song(self, error):
         """Invoked after a song is finished. Plays the next song if there is one"""

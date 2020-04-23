@@ -52,7 +52,7 @@ export class SettingsTabContainer extends Component {
 
 		const availableGuildsRender  = availableGuilds.map(this.guildMenuRenderData.bind(this));
 		const availableRolesRender  = ["minimal","basic","uploader","moderator"].map(this.availableRoleRenderData.bind(this));
-		const availableActionsRender  = ["add", "remove"].map(this.availableActionRenderData.bind(this));
+		const availableActionsRender  = ["assign", "remove"].map(this.availableActionRenderData.bind(this));
 		
 		return (
 			<SettingsTabView

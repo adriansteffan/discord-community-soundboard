@@ -8,7 +8,8 @@ export const CONTROL_PLAYBACK = 'UPDATE_PAYLOAD';
 export const PLAY_SOUNDCLIP = 'PLAY_SOUNDCLIP';
 export const CHANGE_TAB = 'CHANGE_TAB';
 export const UPLOAD_CLIP = 'UPLOAD_CLIP';
-export const PLAY_YOUTUBE = "PLAY_YOUTUBE";
+export const PLAY_YOUTUBE = 'PLAY_YOUTUBE';
+export const EDIT_ROLE = 'EDIT_ROLE';
 
 
 export const fetchBackendPayload = () => {
@@ -183,4 +184,26 @@ export const playYoutube = (term) => {
             type: PLAY_YOUTUBE,
         })
     };
+}
+
+export const editRole = (uid, action, role) => {
+    return (dispatch, getState) => {
+
+        const state = getState();
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', () => {
+            if(xhr.status != 200){
+                alert('Role edit failed!');
+                return;
+            }
+        });
+        xhr.open('POST', config.backendUrl+'/users/edit_roles');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Authorization','Token ' + state.currentInformation.authToken);
+        xhr.send("user_id="+uid+"&action="+action+"&role="+role);
+
+        return {
+            type: EDIT_ROLE,
+        }
+    }
 }

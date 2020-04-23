@@ -33,7 +33,11 @@ async def on_ready():
         print(guild.name)
         #await guild.me.edit(nick=DEFAULT_NICKNAME)
 
-        voice_channel = guild.voice_channels[0]
+        if guild.afk_channel == guild.voice_channels[0]:
+            voice_channel = guild.voice_channels[1]
+        else:
+            voice_channel = guild.voice_channels[0]
+
         guild_query = Guild.objects.filter(id=str(guild.id))
 
         if not guild_query.exists():
@@ -42,7 +46,7 @@ async def on_ready():
 
         else:
             last_channel = bot.get_channel(int(guild_query[0].connected_channel))
-            if last_channel:
+            if last_channel and guild.afk_channel != last_channel:
                 voice_channel = last_channel
                 print(last_channel)
             else:
@@ -64,7 +68,10 @@ async def on_guild_join(guild):
     print(guild.name)
     guild_to_audiocontroller[guild] = AudioController(bot, guild, DEFAULT_VOLUME)
     try:
-        voice_channel = guild.voice_channels[0]
+        if guild.afk_channel == guild.voice_channels[0]:
+            voice_channel = guild.voice_channels[1]
+        else:
+            voice_channel = guild.voice_channels[0]
         await guild_to_audiocontroller[guild].register_voice_channel(voice_channel)
         guild = Guild(id=str(guild.id), name=guild.name, connected_channel=str(voice_channel.id))
         guild.save()

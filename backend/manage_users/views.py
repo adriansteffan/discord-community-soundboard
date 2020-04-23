@@ -38,7 +38,7 @@ def edit_roles(request):
     if action == 'remove':
         remove_role(target, role)
     elif action == 'assign':
-        remove_role(target, role)
+        assign_role(target, role)
     else:
         return Response('Invalid action', status=status.HTTP_404_NOT_FOUND)
 

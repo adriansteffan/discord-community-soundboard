@@ -22,7 +22,7 @@ export class SoundClipTabContainer extends Component {
 	}
 
 	filterSoundClips(filterWord, soundclips){
-		return soundclips.filter(clips => clips.name.includes(filterWord));
+		return soundclips.filter(clips => (clips.name).toLowerCase().includes(filterWord.toLowerCase()));
 	}
 
 	onFilterTextChange(event){

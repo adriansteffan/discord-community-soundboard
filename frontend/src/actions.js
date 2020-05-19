@@ -145,7 +145,7 @@ export const uploadClip = (file, name) => {
                 return;
             }
 
-            alert('Upload successfull');
+            alert('Upload successful!');
 
         });
 

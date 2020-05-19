@@ -15,10 +15,10 @@ export default ({onDrop, onTextChange, onSubmit, currentName, currentFile, reset
 				{({getRootProps, getInputProps}) => (
 				<section className="drop-container noselect">
 					<div className="drop-area" {...getRootProps()}>
-					<input {...getInputProps({disabled: currentFile != null})} />
+					<input  {...getInputProps({disabled: currentFile != null, accept: ".mp3"})} />
 					{	
 						(currentFile == null) ?
-						<p>Drag 'n' drop some files here, or click to select files</p> :
+						<p>Drag 'n' drop your mp3 here, or click to select files</p> :
 						<div className="upload-file-container">
 							<label>{currentFile.name}</label>
 							<FontAwesomeIcon icon={['fas','times']} className="fa-icon" style={{color:"#99aab5"}} onClick={()=>resetFile()}/>

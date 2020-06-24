@@ -10,4 +10,4 @@ config.frontendUrl = "YOUR_FRONTEND_URL_HERE";
 // refer to the README for steps to create the oauth link for your bot
 config.oauthUrl = "YOUR_OAUTH_LINK"
 
-export default configure;
+export default config;

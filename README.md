@@ -183,6 +183,6 @@ in the `backend` directory.
 
 ## Authors
 
-* **Adrian Steffan** - [adriansteffan](https://github.com/adriansteffan)
+* **Adrian Steffan** - [adriansteffan](https://github.com/adriansteffan) [website](https://adriansteffan.com/)
 * **Till Mueller** - deployment setup and docker files
 * **Samuel Amar** - content management rest endpoints
